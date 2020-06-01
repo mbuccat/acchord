@@ -1,2 +1,8 @@
+# dependencies
+node_modules
+
+# dev dependencies
+.eslintrc.js
+
 .DS_Store
 tasks.txt
