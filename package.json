@@ -1,0 +1,11 @@
+{
+  "name": "acchord",
+  "version": "1.0.0",
+  "description": "An app I created to practice full stack development.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mariah Buccat",
+  "license": "CC-BY-NC-SA-4.0"
+}
