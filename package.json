@@ -2,9 +2,9 @@
   "name": "acchord",
   "version": "1.0.0",
   "description": "An app I created to practice full stack development.",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mariah Buccat",
