@@ -4,5 +4,9 @@ node_modules
 # dev dependencies
 .eslintrc.js
 
+# environment
+.env
+
+# misc
 .DS_Store
 tasks.txt
