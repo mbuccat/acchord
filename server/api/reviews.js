@@ -4,7 +4,9 @@ const router = Router();
 
 router.get('/', (req, res) => {
   try {
-    res.send('Test');
+    res.json({
+      message: 'Test',
+    });
   } catch (err) {
     console.log(err.message);
   }
@@ -13,7 +15,9 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   try {
     console.log(req.body);
-    res.send('Post received');
+    res.json({
+      message: 'Post received',
+    });
   } catch (err) {
     console.log(err.message);
   }

@@ -26,16 +26,21 @@ client.connect((err) => {
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.json({
+    message: 'Hello World!',
+  });
 });
 
 app.use('/api', reviews);
 
 app.get('/*', (req, res) => {
   res.status(404);
-  res.send('Page not found');
+  res.json({
+    message: 'Page not found',
+  });
 });
 
 app.listen(port, () => {
