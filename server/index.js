@@ -1,9 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
 const { MongoClient } = require('mongodb');
 const assert = require('assert');
+
 require('dotenv').config();
+
+const reviews = require('./api/reviews');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,10 +25,13 @@ client.connect((err) => {
 
 app.use(morgan('dev'));
 app.use(helmet());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+app.use('/api', reviews);
 
 app.get('/*', (req, res) => {
   res.status(404);
