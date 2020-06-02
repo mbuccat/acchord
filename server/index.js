@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 require('dotenv').config()
 
 const app = express();
@@ -10,9 +11,12 @@ const port = process.env.PORT || 3000;
 const uri = process.env.DATABASE_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true }, { useUnifiedTopology: true });
 client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
+    assert.equal(null, err);
+    console.log("Connected successfully to the database");
+
+    const db = client.db("acchord");
+
+    client.close();
 });
 
 app.use(morgan('dev'));
