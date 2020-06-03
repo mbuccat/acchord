@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
@@ -20,24 +20,46 @@ function Nav() {
 }
 
 function ReviewForm() {
+  const [type, setType] = useState('song');
+  const [query, setQuery] = useState('');
+
+  function handleTypeChange(e) {
+    setType(e.target.value);
+  }
+
+  function handleQueryChange(e) {
+    setQuery(encodeURI(e.target.value));
+  }
+
+
   return (
     <div className="row justify-content-center p-3 mb-2"> 
       <div className="ReviewForm col-sm-12 p-3 bg-white">
-        <h2>Create a review</h2>
+        <div className="form-inline">
+          
+        </div>
+        <form className="form-inline">
+          <label>I want to review &nbsp;</label>
+          <select className="custom-select" onChange={handleTypeChange}>
+            <option selected value="song">a song</option>
+            <option value="artist">an artist</option>
+            <option value="album">an album</option>
+          </select>
+          <div className="w-100"></div>
+          <div className="form-group">
+            <input type="string" className="form-control" id="" aria-describedby=""
+              placeholder={`Which ${type}?`} onChange={handleQueryChange}/>
+              <div>{query}</div>
+          </div>
+        </form>
         <form>
           <div className="form-group">
-            <input type="string" class="form-control" id="" aria-describedby=""
-              placeholder="Search for a song, artist, or album" />
+            <textarea className="form-control" id="" rows="3" placeholder="Your review" />
           </div>
-          <div className="form-group">
-            <textarea class="form-control" id="" rows="3" placeholder="Your review" />
-          </div>
-          <button type="button" class="btn btn-dark">Submit</button>
+          <button type="button" className="btn btn-dark">Submit</button>
         </form>
       </div>
-
-    </div>
-    
+    </div>  
   );
 }
 
