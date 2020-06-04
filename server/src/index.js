@@ -7,10 +7,11 @@ const assert = require('assert');
 
 require('dotenv').config();
 
+const search = require('./api/search');
 const reviews = require('./api/reviews');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 const uri = process.env.DATABASE_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true }, { useUnifiedTopology: true });
@@ -23,7 +24,7 @@ client.connect((err) => {
   client.close();
 });
 
-app.use(morgan('dev'));
+app.use(morgan('common'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
@@ -34,7 +35,8 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use('/api', reviews);
+app.use('/api/search', search);
+app.use('/api/reviews', reviews);
 
 app.get('/*', (req, res) => {
   res.status(404);

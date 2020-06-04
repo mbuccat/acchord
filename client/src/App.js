@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -33,6 +33,21 @@ function SearchForm() {
     setQuery(e.target.elements.query.value)
     }, [setQuery]
   );
+
+  // when the user makes a search query, send to server
+  useEffect(() => {
+    if (query) {
+      fetch('http://localhost:3001/api/search', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ query: query }),
+      })
+        .then(response => response.json())
+        .then(responseJson => console.log(responseJson));
+    }
+  }, [query]);
 
   return (
     <div className="row justify-content-center p-3 mb-2"> 
