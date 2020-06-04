@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './App.css';
 
 function App() {
   return (
     <div className="App container-fluid p-0 m-0">
       <Nav />
+      <SearchForm />
       <ReviewForm />
       <Feed />
     </div>
@@ -19,39 +20,45 @@ function Nav() {
   );
 }
 
-function ReviewForm() {
-  const [type, setType] = useState('song');
-  const [query, setQuery] = useState('');
+function SearchForm() {
+  const [type, setType] = useState('track');
+  const [query, setQuery] = useState();
 
   function handleTypeChange(e) {
     setType(e.target.value);
   }
-
-  function handleQueryChange(e) {
-    setQuery(encodeURI(e.target.value));
-  }
-
+  
+  const handleSubmit = useCallback(e => {
+    e.preventDefault();
+    setQuery(e.target.elements.query.value)
+    }, [setQuery]
+  );
 
   return (
     <div className="row justify-content-center p-3 mb-2"> 
       <div className="ReviewForm col-sm-12 p-3 bg-white">
-        <div className="form-inline">
-          
-        </div>
-        <form className="form-inline">
-          <label>I want to review &nbsp;</label>
+        <form className="form-inline" onSubmit={handleSubmit}>
+          <label className="h3">I want to review &nbsp;</label>
           <select className="custom-select" onChange={handleTypeChange}>
-            <option selected value="song">a song</option>
+            <option defaultValue value="track">a track</option>
             <option value="artist">an artist</option>
             <option value="album">an album</option>
           </select>
           <div className="w-100"></div>
           <div className="form-group">
-            <input type="string" className="form-control" id="" aria-describedby=""
-              placeholder={`Which ${type}?`} onChange={handleQueryChange}/>
-              <div>{query}</div>
+            <input type="string" className="form-control" id="" name="query" aria-describedby=""
+              placeholder={`Which ${type}?`}/>
           </div>
         </form>
+      </div>
+    </div>  
+  );
+}
+
+function ReviewForm() {
+  return(
+    <div className="row justify-content-center p-3 mb-2"> 
+      <div className="ReviewForm col-sm-12 p-3 bg-white">
         <form>
           <div className="form-group">
             <textarea className="form-control" id="" rows="3" placeholder="Your review" />
@@ -59,7 +66,7 @@ function ReviewForm() {
           <button type="button" className="btn btn-dark">Submit</button>
         </form>
       </div>
-    </div>  
+    </div>
   );
 }
 
