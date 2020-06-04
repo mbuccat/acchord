@@ -16,7 +16,8 @@
     "express": "^4.17.1",
     "helmet": "^3.22.0",
     "mongodb": "^3.5.8",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

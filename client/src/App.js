@@ -30,22 +30,26 @@ function SearchForm() {
   
   const handleSubmit = useCallback(e => {
     e.preventDefault();
-    setQuery(e.target.elements.query.value)
+    setQuery(e.target.elements.query.value);
     }, [setQuery]
   );
 
   // when the user makes a search query, send to server
   useEffect(() => {
     if (query) {
-      fetch('http://localhost:3001/api/search', {
+      try {
+        fetch('http://localhost:3001/api/search', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ query: query }),
+        body: JSON.stringify({ query: query, type: type }),
       })
         .then(response => response.json())
         .then(responseJson => console.log(responseJson));
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, [query]);
 
