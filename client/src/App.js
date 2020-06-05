@@ -20,7 +20,7 @@ function Nav() {
 }
 
 function NewReviewForm() {
-  const [type, setType] = useState('track');
+  const [mediaType, setMediaType] = useState('track');
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState('Searching...');
   const [displaySearchForm, setDisplaySearchForm] = useState(true);
@@ -29,8 +29,8 @@ function NewReviewForm() {
   const [mediaName, setMediaName] = useState('default');
   const [mediaCreator, setMediaCreator] = useState('default');
 
-  function handleTypeChange(e) {
-    setType(e.target.value);
+  function handleMediaTypeChange(e) {
+    setMediaType(e.target.value);
   }
 
   const handleSubmit = useCallback((e) => {
@@ -105,15 +105,15 @@ function NewReviewForm() {
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ query, type }),
+          body: JSON.stringify({ query, mediaType }),
         })
           .then((response) => response.json())
-          .then((responseJson) => addToSearchResults(responseJson.jsonFromMusicApi, type));
+          .then((responseJson) => addToSearchResults(responseJson.jsonFromMusicApi, mediaType));
       } catch (err) {
         console.log(err);
       }
     }
-  }, [query, type, addToSearchResults]);
+  }, [query, mediaType, addToSearchResults]);
 
   return (
     (
@@ -123,7 +123,7 @@ function NewReviewForm() {
             && (
               <form className="form-inline" onSubmit={handleSubmit}>
                 <h3>I want to review &nbsp;</h3>
-                <select className="custom-select" onChange={handleTypeChange}>
+                <select className="custom-select" onChange={handleMediaTypeChange}>
                   <option defaultValue value="track">a track</option>
                   <option value="artist">an artist</option>
                   <option value="album">an album</option>
@@ -136,14 +136,15 @@ function NewReviewForm() {
                     id=""
                     name="query"
                     aria-describedby=""
-                    placeholder={`Which ${type}?`}
+                    placeholder={`Which ${mediaType}?`}
                   />
                 </div>
               </form>
             )
           }
           {displayResults && <div>{searchResults}</div>}
-          {displayReviewForm && <ReviewForm mediaName={mediaName} mediaCreator={mediaCreator} />}
+          {displayReviewForm
+          && <ReviewForm mediaName={mediaName} mediaCreator={mediaCreator} mediaType={mediaType} />}
         </div>
       </div>
     )
@@ -151,21 +152,49 @@ function NewReviewForm() {
 }
 
 function ReviewForm(props) {
-  const { mediaName, mediaCreator } = props;
-  const info = mediaName === '' ? `Reviewing ${mediaCreator}` : `Reviewing ${mediaName} by ${mediaCreator}`;
+  const { mediaName, mediaCreator, mediaType } = props;
+  const reviewHeader = mediaName === '' ? `Reviewing ${mediaCreator}` : `Reviewing ${mediaName} by ${mediaCreator}`;
+  const [content, setContent] = useState();
+  const [display, setDisplay] = useState(true);
+
+  const handleButtonClick = useCallback((e) => {
+    setContent(e.target.form.reviewtext.value);
+  }, [setContent]);
+
+  useEffect(() => {
+    if (content) {
+      setDisplay(false);
+      const reviewData = {
+        mediaType,
+        mediaName,
+        mediaCreator,
+        content,
+        created: new Date(),
+      };
+    }
+  }, [mediaCreator, mediaName, mediaType, content]);
 
   return (
+    display && (
     <div className="row justify-content-center p-3 mb-2">
       <div className="ReviewForm col-sm-12 p-3 bg-white">
-        <h2> {info} </h2>
-        <form>
-          <div className="form-group">
-            <textarea className="form-control" id="" rows="3" placeholder="Your review" />
-          </div>
-          <button type="button" className="btn btn-dark">Submit</button>
+        <h2>
+          {reviewHeader}
+        </h2>
+        <form id="review-form">
+          <textarea className="form-control" id="reviewtext" rows="3" placeholder="Your review" />
+          <button
+            type="button"
+            form="review-form"
+            className="btn btn-dark"
+            onClick={handleButtonClick}
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>
+    )
   );
 }
 

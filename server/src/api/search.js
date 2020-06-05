@@ -5,9 +5,9 @@ const router = Router();
 
 router.post('/', async (req, res) => {
   try {
-    const type = req.body.type;
+    const mediaType = req.body.mediaType;
     const query = encodeURI(req.body.query);
-    const api_url = `https://api.deezer.com/search/${type}/?q=${query}&index=0&limit=5&output=json`
+    const api_url = `https://api.deezer.com/search/${mediaType}/?q=${query}&index=0&limit=5&output=json`
 
     const apiResponse = await fetch(api_url);
     const apiResponseJson = await apiResponse.json();
