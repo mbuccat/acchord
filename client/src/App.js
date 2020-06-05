@@ -5,8 +5,7 @@ function App() {
   return (
     <div className="App container-fluid p-0 m-0">
       <Nav />
-      <SearchForm />
-      <ReviewForm />
+      <NewReviewForm />
       <Feed />
     </div>
   );
@@ -20,12 +19,15 @@ function Nav() {
   );
 }
 
-function SearchForm() {
+function NewReviewForm() {
   const [type, setType] = useState('track');
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState('Searching...');
-  const [displayForm, setDisplayForm] = useState(true);
+  const [displaySearchForm, setDisplaySearchForm] = useState(true);
   const [displayResults, setDisplayResults] = useState(false);
+  // const [displayReviewForm, setDisplayReviewForm] = useState(true);
+  const [mediaName, setMediaName] = useState('default');
+  const [mediaCreator, setMediaCreator] = useState('default');
 
   function handleTypeChange(e) {
     setType(e.target.value);
@@ -36,6 +38,13 @@ function SearchForm() {
     setQuery(e.target.elements.query.value);
   }, [setQuery]);
 
+  const handleButtonClick = useCallback((e) => {
+    e.preventDefault();
+    setMediaName(e.target.dataset.medianame);
+    setMediaCreator(e.target.dataset.mediacreator);
+    setDisplayResults(false);
+  }, [setMediaName, setMediaCreator]);
+
   const addToSearchResults = useCallback((jsonFromApi, mediaType) => {
     const { data } = jsonFromApi;
 
@@ -44,32 +53,50 @@ function SearchForm() {
     } else if (mediaType === 'track') {
       setSearchResults(data.map((item) =>
         <li>
-          <button type="button" className="btn btn-primary mb-2">
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={handleButtonClick}
+            data-medianame={item.title}
+            data-mediacreator={item.artist.name}
+          >
             {item.title} by {item.artist.name}
           </button>
         </li>));
     } else if (mediaType === 'artist') {
       setSearchResults(data.map((item) =>
         <li>
-          <button type="button" className="btn btn-primary mb-2">
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={handleButtonClick}
+            data-medianame=""
+            data-mediacreator={item.name}
+          >
             {item.name}
           </button>
         </li>));
     } else if (mediaType === 'album') {
       setSearchResults(data.map((item) =>
         <li>
-          <button type="button" className="btn btn-primary mb-2">
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={handleButtonClick}
+            data-medianame={item.title}
+            data-mediacreator={item.artist.name}
+          >
             {item.title} by {item.artist.name}
           </button>
         </li>));
     }
-  }, [setSearchResults]);
+  }, [setSearchResults, handleButtonClick]);
 
   // when the user makes a search query, send to server
   useEffect(() => {
     if (query) {
       try {
-        setDisplayForm(false);
+        setDisplaySearchForm(false);
         setDisplayResults(true);
 
         fetch('http://localhost:3001/api/search', {
@@ -91,7 +118,7 @@ function SearchForm() {
     (
       <div className="row justify-content-center p-3 mb-2">
         <div className="SearchForm col-sm-12 p-3 bg-white">
-          { displayForm
+          { displaySearchForm
             && (
               <form className="form-inline" onSubmit={handleSubmit}>
                 <h3>I want to review &nbsp;</h3>
@@ -115,26 +142,28 @@ function SearchForm() {
             )
           }
           {displayResults && <div>{searchResults}</div>}
+          {/* {displayReviewForm && <ReviewForm />} */}
         </div>
       </div>
     )
   );
 }
 
-function ReviewForm() {
-  return (
-    <div className="row justify-content-center p-3 mb-2">
-      <div className="ReviewForm col-sm-12 p-3 bg-white">
-        <form>
-          <div className="form-group">
-            <textarea className="form-control" id="" rows="3" placeholder="Your review" />
-          </div>
-          <button type="button" className="btn btn-dark">Submit</button>
-        </form>
-      </div>
-    </div>
-  );
-}
+// function ReviewForm(props) {
+//   return (
+//     <div className="row justify-content-center p-3 mb-2">
+//       <div className="ReviewForm col-sm-12 p-3 bg-white">
+//         <h2>My thoughts on name here</h2>
+//         <form>
+//           <div className="form-group">
+//             <textarea className="form-control" id="" rows="3" placeholder="Your review" />
+//           </div>
+//           <button type="button" className="btn btn-dark">Submit</button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
 
 function Feed() {
   return (
