@@ -25,7 +25,7 @@ function NewReviewForm() {
   const [searchResults, setSearchResults] = useState('Searching...');
   const [displaySearchForm, setDisplaySearchForm] = useState(true);
   const [displayResults, setDisplayResults] = useState(false);
-  // const [displayReviewForm, setDisplayReviewForm] = useState(true);
+  const [displayReviewForm, setDisplayReviewForm] = useState(false);
   const [mediaName, setMediaName] = useState('default');
   const [mediaCreator, setMediaCreator] = useState('default');
 
@@ -43,6 +43,7 @@ function NewReviewForm() {
     setMediaName(e.target.dataset.medianame);
     setMediaCreator(e.target.dataset.mediacreator);
     setDisplayResults(false);
+    setDisplayReviewForm(true);
   }, [setMediaName, setMediaCreator]);
 
   const addToSearchResults = useCallback((jsonFromApi, mediaType) => {
@@ -142,28 +143,31 @@ function NewReviewForm() {
             )
           }
           {displayResults && <div>{searchResults}</div>}
-          {/* {displayReviewForm && <ReviewForm />} */}
+          {displayReviewForm && <ReviewForm mediaName={mediaName} mediaCreator={mediaCreator} />}
         </div>
       </div>
     )
   );
 }
 
-// function ReviewForm(props) {
-//   return (
-//     <div className="row justify-content-center p-3 mb-2">
-//       <div className="ReviewForm col-sm-12 p-3 bg-white">
-//         <h2>My thoughts on name here</h2>
-//         <form>
-//           <div className="form-group">
-//             <textarea className="form-control" id="" rows="3" placeholder="Your review" />
-//           </div>
-//           <button type="button" className="btn btn-dark">Submit</button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
+function ReviewForm(props) {
+  const { mediaName, mediaCreator } = props;
+  const info = mediaName === '' ? `Reviewing ${mediaCreator}` : `Reviewing ${mediaName} by ${mediaCreator}`;
+
+  return (
+    <div className="row justify-content-center p-3 mb-2">
+      <div className="ReviewForm col-sm-12 p-3 bg-white">
+        <h2> {info} </h2>
+        <form>
+          <div className="form-group">
+            <textarea className="form-control" id="" rows="3" placeholder="Your review" />
+          </div>
+          <button type="button" className="btn btn-dark">Submit</button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 function Feed() {
   return (
