@@ -23,7 +23,7 @@ function Nav() {
 function SearchForm() {
   const [type, setType] = useState('track');
   const [query, setQuery] = useState();
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState('Searching...');
   const [displayForm, setDisplayForm] = useState(true);
   const [displayResults, setDisplayResults] = useState(false);
 
@@ -38,24 +38,29 @@ function SearchForm() {
 
   const addToSearchResults = useCallback((jsonFromApi, mediaType) => {
     const { data } = jsonFromApi;
-    if (mediaType === 'track') {
+
+    if (data == false) {
+      setSearchResults('No matches found. Please be more specific with your search.');
+    } else if (mediaType === 'track') {
       setSearchResults(data.map((item) =>
         <li>
-          {item.title}
-          ` by `
-          {item.artist.name}
+          <button type="button" className="btn btn-primary mb-2">
+            {item.title} by {item.artist.name}
+          </button>
         </li>));
     } else if (mediaType === 'artist') {
       setSearchResults(data.map((item) =>
         <li>
-          {item.name}
+          <button type="button" className="btn btn-primary mb-2">
+            {item.name}
+          </button>
         </li>));
     } else if (mediaType === 'album') {
       setSearchResults(data.map((item) =>
         <li>
-          {item.title}
-          ` by `
-          {item.artist.name}
+          <button type="button" className="btn btn-primary mb-2">
+            {item.title} by {item.artist.name}
+          </button>
         </li>));
     }
   }, [setSearchResults]);
@@ -109,7 +114,7 @@ function SearchForm() {
               </form>
             )
           }
-          {displayResults && <ul>{searchResults}</ul>}
+          {displayResults && <div>{searchResults}</div>}
         </div>
       </div>
     )
