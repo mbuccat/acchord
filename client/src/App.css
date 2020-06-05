@@ -1,4 +1,5 @@
 .Feed,
-.ReviewForm {
+.ReviewForm,
+.SearchForm {
   max-width: 600px;
 }

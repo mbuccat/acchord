@@ -3,6 +3,9 @@
 /.pnp
 .pnp.js
 
+# dev dependencies
+.eslintrc.json
+
 # testing
 /coverage
 
