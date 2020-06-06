@@ -9,8 +9,37 @@ const client = new MongoClient(uri, { useNewUrlParser: true }, { useUnifiedTopol
 client.connect((err) => {
   assert.equal(null, err);
   console.log('Successfully connected to the database');
+  client.db('acchord').createCollection("reviews", {
+    validator: {
+       $jsonSchema: {
+          bsonType: "object",
+          required: [ "mediaType", "mediaName", "mediaCreator", "content", "created" ],
+          properties: {
+            mediaType: {
+              bsonType: "string",
+              description: "must be a string and is required"
+             },
+            mediaName: {
+              bsonType: "string",
+              description: "must be a string and is required"
+            },
+            mediaCreator: {
+              bsonType: "string",
+              description: "must be a string and is required"
+            },
+            content: {
+              bsonType: "string",
+              description: "must be a string and is required"
+            },
+            created: {
+              bsonType: "date",
+              description: "must be a date and is required"
+            }
+          }
+       }
+    }
+  });
 });
-
 
 router.get('/', (req, res) => {
   try {
@@ -36,13 +65,13 @@ router.post('/', (req, res) => {
   try {
     const db = client.db('acchord');
     const collection = db.collection('reviews');
-    const { mediaType, mediaName, mediaCreator, content, created } = req.body;
+    const { mediaType, mediaName, mediaCreator, content } = req.body;
     const reviewData = {
       mediaType,
       mediaName,
       mediaCreator,
       content,
-      created,
+      created: new Date(),
     };
 
     collection.insertOne(reviewData, (insertionErr) => {
