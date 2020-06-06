@@ -46,13 +46,13 @@ function NewReviewForm() {
     setDisplayReviewForm(true);
   }, [setMediaName, setMediaCreator]);
 
-  const addToSearchResults = useCallback((jsonFromApi, mediaType) => {
+  const createSearchResultsDisplay = useCallback((jsonFromApi) => {
     const { data } = jsonFromApi;
 
     if (data == false) {
       setSearchResults('No matches found. Please be more specific with your search.');
     } else if (mediaType === 'track') {
-      setSearchResults(data.map((item) =>
+      setSearchResults(data.map((item) => (
         <li>
           <button
             type="button"
@@ -61,11 +61,16 @@ function NewReviewForm() {
             data-medianame={item.title}
             data-mediacreator={item.artist.name}
           >
-            {item.title} by {item.artist.name}
+            {item.title}
+            {' '}
+            by
+            {' '}
+            {item.artist.name}
           </button>
-        </li>));
+        </li>
+      )));
     } else if (mediaType === 'artist') {
-      setSearchResults(data.map((item) =>
+      setSearchResults(data.map((item) => (
         <li>
           <button
             type="button"
@@ -76,9 +81,10 @@ function NewReviewForm() {
           >
             {item.name}
           </button>
-        </li>));
+        </li>
+      )));
     } else if (mediaType === 'album') {
-      setSearchResults(data.map((item) =>
+      setSearchResults(data.map((item) => (
         <li>
           <button
             type="button"
@@ -87,9 +93,14 @@ function NewReviewForm() {
             data-medianame={item.title}
             data-mediacreator={item.artist.name}
           >
-            {item.title} by {item.artist.name}
+            {item.title}
+            {' '}
+            by
+            {' '}
+            {item.artist.name}
           </button>
-        </li>));
+        </li>
+      )));
     }
   }, [setSearchResults, handleButtonClick]);
 
@@ -108,12 +119,12 @@ function NewReviewForm() {
           body: JSON.stringify({ query, mediaType }),
         })
           .then((response) => response.json())
-          .then((responseJson) => addToSearchResults(responseJson.jsonFromMusicApi, mediaType));
+          .then((responseJson) => createSearchResultsDisplay(responseJson.jsonFromMusicApi));
       } catch (err) {
         console.log(err);
       }
     }
-  }, [query, mediaType, addToSearchResults]);
+  }, [query, mediaType, createSearchResultsDisplay]);
 
   return (
     (
@@ -140,8 +151,7 @@ function NewReviewForm() {
                   />
                 </div>
               </form>
-            )
-          }
+            )}
           {displayResults && <div>{searchResults}</div>}
           {displayReviewForm
           && <ReviewForm mediaName={mediaName} mediaCreator={mediaCreator} mediaType={mediaType} />}
@@ -176,7 +186,7 @@ function ReviewForm(props) {
           mediaCreator,
           content,
         }),
-      })
+      });
     }
   }, [mediaCreator, mediaName, mediaType, content]);
 
@@ -205,19 +215,50 @@ function ReviewForm(props) {
 }
 
 function Feed() {
+  const [feed, setFeed] = useState([]);
+
+  // for each post in the results array, create an li
+  const createFeed = (results) => {
+    setFeed(
+      results.reverse().map(({
+        content, created, mediaCreator, mediaName,
+      }) => {
+        const reviewHeader = mediaName === '' ? `Review of ${mediaCreator}` : `Review of ${mediaName} by ${mediaCreator}`;
+        return (
+          <li className="media">
+            <img className="mr-3" src=".../64x64" alt="profile" />
+            <div className="media-body">
+              <h5 className="mt-0 mb-1">{reviewHeader}</h5>
+              {content}
+              <small>{created}</small>
+            </div>
+          </li>
+        );
+      }),
+    );
+  };
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/reviews')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Request failed!');
+      })
+      .then((responseJson) => {
+        const { results } = responseJson;
+        createFeed(results);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
+
   return (
     <div className="row justify-content-center p-3 mb-4">
       <div className="Feed p-3 bg-white">
         <h2>Recent reviews</h2>
         <ul className="list-unstyled">
-          <li className="media">
-            <img className="mr-3" src=".../64x64" alt="profile" />
-            <div className="media-body">
-              <h5 className="mt-0 mb-1">Sample post</h5>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Etiam ac tortor vitae odio faucibus mollis vitae et dui.
-            </div>
-          </li>
+          {feed}
         </ul>
       </div>
     </div>
