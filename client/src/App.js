@@ -164,13 +164,19 @@ function ReviewForm(props) {
   useEffect(() => {
     if (content) {
       setDisplay(false);
-      const reviewData = {
-        mediaType,
-        mediaName,
-        mediaCreator,
-        content,
-        created: new Date(),
-      };
+
+      fetch('http://localhost:3001/api/reviews', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          mediaType,
+          mediaName,
+          mediaCreator,
+          content,
+        }),
+      })
     }
   }, [mediaCreator, mediaName, mediaType, content]);
 
