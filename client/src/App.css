@@ -1,5 +1,11 @@
+.NewReviewForm,
 .Feed,
 .ReviewForm,
 .SearchForm {
+  background: white;
   max-width: 600px;
+}
+.navbar-brand {
+  font-family: 'Muli', sans-serif;
+  font-size: x-large;
 }

@@ -13,8 +13,8 @@ function App() {
 
 function Nav() {
   return (
-    <nav className="navbar navbar-expand navbar-light bg-white mb-4">
-      <span className="navbar-brand mb-0 h1">acchord</span>
+    <nav className="navbar navbar-expand px-2 border border-dark" style={{background: '#ffffff'}}>
+      <h1 className="navbar-brand m-0 px-3">acchord</h1>
     </nav>
   );
 }
@@ -35,7 +35,7 @@ function NewReviewForm() {
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
-    setQuery(e.target.elements.query.value);
+    setQuery(e.target.query.value);
   }, [setQuery]);
 
   const handleButtonClick = useCallback((e) => {
@@ -56,7 +56,7 @@ function NewReviewForm() {
         <li>
           <button
             type="button"
-            className="btn btn-primary mb-2"
+            className="btn btn-dark mb-2 btn-sm w-100 text-left"
             onClick={handleButtonClick}
             data-medianame={item.title}
             data-mediacreator={item.artist.name}
@@ -74,7 +74,7 @@ function NewReviewForm() {
         <li>
           <button
             type="button"
-            className="btn btn-primary mb-2"
+            className="btn btn-dark mb-2 btn-sm w-100 text-left"
             onClick={handleButtonClick}
             data-medianame=""
             data-mediacreator={item.name}
@@ -88,7 +88,7 @@ function NewReviewForm() {
         <li>
           <button
             type="button"
-            className="btn btn-primary mb-2"
+            className="btn btn-dark mb-2 btn-sm w-100 text-left"
             onClick={handleButtonClick}
             data-medianame={item.title}
             data-mediacreator={item.artist.name}
@@ -102,7 +102,7 @@ function NewReviewForm() {
         </li>
       )));
     }
-  }, [setSearchResults, handleButtonClick]);
+  }, [setSearchResults, handleButtonClick, mediaType]);
 
   // when the user makes a search query, send to server
   useEffect(() => {
@@ -128,19 +128,21 @@ function NewReviewForm() {
 
   return (
     (
-      <div className="row justify-content-center p-3 mb-2">
-        <div className="SearchForm col-sm-12 p-3 bg-white">
+      <div className="row justify-content-center p-4 mb-0">
+        <div className="SearchForm col-sm-12 p-4 border border-dark rounded">
           { displaySearchForm
             && (
-              <form className="form-inline" onSubmit={handleSubmit}>
-                <h3>I want to review &nbsp;</h3>
-                <select className="custom-select" onChange={handleMediaTypeChange}>
-                  <option defaultValue value="track">a track</option>
-                  <option value="artist">an artist</option>
-                  <option value="album">an album</option>
-                </select>
+              <form className="" onSubmit={handleSubmit}>
+                <h2>I want to review:</h2>
                 <div className="w-100" />
-                <div className="form-group">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <select className="custom-select" onChange={handleMediaTypeChange}>
+                      <option defaultValue value="track">a track</option>
+                      <option value="artist">an artist</option>
+                      <option value="album">an album</option>
+                    </select>
+                  </div>
                   <input
                     type="string"
                     className="form-control"
@@ -152,7 +154,13 @@ function NewReviewForm() {
                 </div>
               </form>
             )}
-          {displayResults && <div>{searchResults}</div>}
+          {displayResults
+            && (
+            <ul className="list-group list-unstyled">
+              <h2>Did you mean:</h2>
+              {searchResults}
+            </ul>
+            )}
           {displayReviewForm
           && <ReviewForm mediaName={mediaName} mediaCreator={mediaCreator} mediaType={mediaType} />}
         </div>
@@ -192,13 +200,12 @@ function ReviewForm(props) {
 
   return (
     display && (
-    <div className="row justify-content-center p-3 mb-2">
-      <div className="ReviewForm col-sm-12 p-3 bg-white">
+      <div className="ReviewForm">
         <h2>
           {reviewHeader}
         </h2>
         <form id="review-form">
-          <textarea className="form-control" id="reviewtext" rows="3" placeholder="Your review" />
+          <textarea className="form-control mb-1" id="reviewtext" rows="3" placeholder="Your review" />
           <button
             type="button"
             form="review-form"
@@ -209,7 +216,6 @@ function ReviewForm(props) {
           </button>
         </form>
       </div>
-    </div>
     )
   );
 }
@@ -225,12 +231,14 @@ function Feed() {
       }) => {
         const reviewHeader = mediaName === '' ? `Review of ${mediaCreator}` : `Review of ${mediaName} by ${mediaCreator}`;
         return (
-          <li className="media">
+          <li className="media mb-5">
             <img className="mr-3" src=".../64x64" alt="profile" />
             <div className="media-body">
               <h5 className="mt-0 mb-1">{reviewHeader}</h5>
               {content}
-              <small>{created}</small>
+              {' '}
+              <br />
+              <small>{(new Date(created)).toLocaleString()}</small>
             </div>
           </li>
         );
@@ -254,8 +262,8 @@ function Feed() {
   }, []);
 
   return (
-    <div className="row justify-content-center p-3 mb-4">
-      <div className="Feed p-3 bg-white">
+    <div className="row justify-content-center py-0 px-4">
+      <div className="Feed col-sm-12 p-4 border border-dark rounded">
         <h2>Recent reviews</h2>
         <ul className="list-unstyled">
           {feed}
