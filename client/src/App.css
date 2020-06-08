@@ -1,7 +1,5 @@
-.NewReviewForm,
-.Feed,
-.ReviewForm,
-.SearchForm {
+.InputBox,
+.Feed {
   background: white;
   max-width: 600px;
 }
