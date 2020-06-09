@@ -1,6 +1,9 @@
 const { Router } = require('express');
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcryptjs');
 const assert = require('assert');
+
+const schema = require('./schema');
 
 const router = Router();
 
@@ -9,28 +12,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true }, { useUnifiedTopol
 client.connect((err) => {
   assert.equal(null, err);
   console.log('Successfully connected to the database from auth router');
-  client.db('acchord').createCollection('users', {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['username', 'password'],
-        properties: {
-          username: {
-            bsonType: 'string',
-            maxLength: 20,
-            minLength: 3,
-            description: 'must be a string and is required',
-          },
-          password: {
-            bsonType: 'string',
-            maxLength: 20,
-            minLength: 8,
-            description: 'must be a string and is required',
-          },
-        },
-      },
-    },
-  });
 });
 
 router.get('/', (req, res) => {
@@ -39,28 +20,43 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/signup', async (req, res) => {
+const validateSignUp = async (req, res, next) => {
+  const error = await schema.validateAsync(req.body);
+  if (error !== null) {
+    next();
+  } else {
+    next(new Error('Sign up info invalid'));
+  }
+};
+
+const checkUniqueUser = async (req, res, next) => {
+  const collection = client.db('acchord').collection('users');
+  const { username } = req.body;
+  const count = await collection.countDocuments({ username }, { limit: 1 });
+
+  if (count === 0) {
+    next();
+  } else {
+    res.status(400).json({ message: 'Username is taken.' });
+    next(new Error('User not unique'));
+  }
+};
+
+router.post('/signup', validateSignUp, checkUniqueUser, async (req, res) => {
   try {
-    console.log('body', req.body);
-    const db = client.db('acchord');
-    const collection = db.collection('users');
     const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
     const userInfo = {
       username,
-      password,
+      hashedPassword,
     };
 
-    const count = await collection.countDocuments({ username }, { limit: 1 });
-
-    if (count === 0) {
-      collection.insertOne(userInfo, (insertionErr) => {
-        assert.equal(null, insertionErr);
-        console.log('User information inserted into database');
-        res.sendStatus(200);
-      });
-    } else {
-      res.status(400).send('Username already taken');
-    }
+    const collection = client.db('acchord').collection('users');
+    collection.insertOne(userInfo, (insertionErr) => {
+      assert.equal(null, insertionErr);
+      console.log('User information inserted into database');
+      res.sendStatus(200);
+    });
   } catch (err) {
     res.sendStatus(500);
     console.log(err.message);
