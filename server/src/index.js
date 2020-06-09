@@ -5,6 +5,7 @@ const cors = require('cors');
 
 require('dotenv').config();
 
+const auth = require('./auth/index')
 const search = require('./api/search');
 const reviews = require('./api/reviews');
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/auth', auth)
 app.use('/api/search', search);
 app.use('/api/reviews', reviews);
 
