@@ -1,10 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import UserContext from './UserContext';
+
+const Joi = require('@hapi/joi');
+
+const schema = Joi.object({
+  username: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+
+  password: Joi.string()
+    .trim()
+    .min(8)
+    .max(20)
+    .required(),
+});
 
 function AuthBox() {
   const { user, setUser } = useContext(UserContext);
   const [displaySignUp, setDisplaySignUp] = useState(false);
   const [displayLogIn, setDisplayLogIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignUp = () => {
     setDisplaySignUp(true);
@@ -14,9 +32,63 @@ function AuthBox() {
     setDisplayLogIn(true);
   };
 
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const username = e.target.form.username.value;
+      const password = e.target.form.password.value;
+      const { error } = await schema.validate({ username, password });
+
+      if (error == undefined) {
+        setUserInfo({ username, password });
+        setErrorMessage('');
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      const item = error.message.includes('username') ? 'username' : 'password';
+      const message = displaySignUp
+        ? `Please make sure your ${item} meets the requirements.`
+        : `Please enter your ${item}.`;
+      setErrorMessage(message);
+      console.log(error.name);
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo && displaySignUp) {
+      fetch('http://localhost:3001/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify(userInfo),
+        headers: {
+          'content-type': 'application/json',
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setUser(userInfo.username);
+          return response.json();
+        }
+        return response.json().then((error) => {
+          throw new Error(error.message);
+        });
+      }).then((responseJson) => {
+        console.log(responseJson);
+      }).catch((error) => {
+        setErrorMessage(error.message);
+      });
+    } else if (userInfo && displayLogIn) {
+      // TO DO
+    }
+  }, [userInfo, displaySignUp, displayLogIn]);
+
   return (
     <div className="row justify-content-center p-4 mb-0">
       <div className="AuthBox col-sm-12 p-4 border border-dark rounded">
+        { errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+        )}
         {!displaySignUp && !displayLogIn && (
         <div>
           <button className="btn-sm btn-dark" onClick={handleSignUp} type="button">Sign up</button>
@@ -30,7 +102,7 @@ function AuthBox() {
         )}
         {displaySignUp
          && (
-         <form>
+         <form id="signUpForm">
            <h2>Sign Up</h2>
            <div className="form-group">
              <label htmlFor="username">Username</label>
@@ -42,12 +114,12 @@ function AuthBox() {
              <input type="password" className="form-control" id="password" placeholder="Enter a password" />
              <small id="passwordHelp" className="form-text text-muted">Must be 8 to 20 characters.</small>
            </div>
-           <button type="submit" className="btn-sm btn-dark">Sign Up</button>
+           <button type="submit" form="signUpForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Sign Up</button>
          </form>
          )}
         {displayLogIn
           && (
-          <form>
+          <form id="logInForm">
             <h2>Log In</h2>
             <div className="form-group">
               <label htmlFor="username">Username</label>
@@ -57,7 +129,7 @@ function AuthBox() {
               <label htmlFor="password">Password</label>
               <input type="password" className="form-control" id="password" placeholder="Enter your password" />
             </div>
-            <button type="submit" className="btn-sm btn-dark">Log In</button>
+            <button type="submit" form="logInForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Log In</button>
           </form>
           )}
       </div>

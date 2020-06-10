@@ -55,7 +55,7 @@ router.post('/signup', validateSignUp, checkUniqueUser, async (req, res) => {
     collection.insertOne(userInfo, (insertionErr) => {
       assert.equal(null, insertionErr);
       console.log('User information inserted into database');
-      res.sendStatus(200);
+      res.status(200).json('User created!');
     });
   } catch (err) {
     res.sendStatus(500);
