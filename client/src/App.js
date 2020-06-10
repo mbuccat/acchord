@@ -1,16 +1,90 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect, useContext, useMemo,
+} from 'react';
 import './App.css';
 import Nav from './components/Nav';
 import Feed from './components/Feed';
 import ReviewForm from './components/ReviewForm';
 import SearchResults from './components/SearchResults';
 
+const UserContext = React.createContext();
+
 function App() {
+  const [user, setUser] = useState(null);
+  const userValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+
   return (
     <div className="App container-fluid p-0 m-0">
       <Nav />
-      <InputBox />
+      <UserContext.Provider value={userValue}>
+        {!user && <AuthBox />}
+        {user && <InputBox />}
+      </UserContext.Provider>
       <Feed />
+    </div>
+  );
+}
+
+function AuthBox() {
+  const { user, setUser } = useContext(UserContext);
+  const [displaySignUp, setDisplaySignUp] = useState(false);
+  const [displayLogIn, setDisplayLogIn] = useState(false);
+
+  const handleSignUp = () => {
+    setDisplaySignUp(true);
+  };
+
+  const handleLogIn = () => {
+    setDisplayLogIn(true);
+  };
+
+  return (
+    <div className="row justify-content-center p-4 mb-0">
+      <div className="AuthBox col-sm-12 p-4 border border-dark rounded">
+        {!displaySignUp && !displayLogIn && (
+        <div>
+          <button className="btn-sm btn-dark" onClick={handleSignUp} type="button">Sign up</button>
+          {' '}
+          or
+          {' '}
+          <button className="btn-sm btn-dark" onClick={handleLogIn} type="button">Log in</button>
+          {' '}
+          to post reviews.
+        </div>
+        )}
+        {displaySignUp
+         && (
+         <form>
+           <h2>Sign Up</h2>
+           <div className="form-group">
+             <label htmlFor="username">Username</label>
+             <input type="username" className="form-control" id="username" aria-describedby="" placeholder="Enter a username" />
+             <small id="usernameHelp" className="form-text text-muted">Must be 3 to 20 characters.</small>
+           </div>
+           <div className="form-group">
+             <label htmlFor="password">Password</label>
+             <input type="password" className="form-control" id="password" placeholder="Enter a password" />
+             <small id="passwordHelp" className="form-text text-muted">Must be 8 to 20 characters.</small>
+           </div>
+           <button type="submit" className="btn-sm btn-dark">Sign Up</button>
+         </form>
+         )}
+        {displayLogIn
+          && (
+          <form>
+            <h2>Log In</h2>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input type="username" className="form-control" id="username" aria-describedby="" placeholder="Enter your username" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input type="password" className="form-control" id="password" placeholder="Enter your password" />
+            </div>
+            <button type="submit" className="btn-sm btn-dark">Log In</button>
+          </form>
+          )}
+      </div>
     </div>
   );
 }
@@ -47,24 +121,6 @@ function InputBox() {
 
     if (data == false) {
       setSearchResults('No matches found. Please be more specific with your search.');
-    } else if (mediaType === 'track') {
-      setSearchResults(data.map((item) => (
-        <li>
-          <button
-            type="button"
-            className="btn btn-dark mb-2 btn-sm w-100 text-left"
-            onClick={handleButtonClick}
-            data-medianame={item.title}
-            data-mediacreator={item.artist.name}
-          >
-            {item.title}
-            {' '}
-            by
-            {' '}
-            {item.artist.name}
-          </button>
-        </li>
-      )));
     } else if (mediaType === 'artist') {
       setSearchResults(data.map((item) => (
         <li>
@@ -79,7 +135,7 @@ function InputBox() {
           </button>
         </li>
       )));
-    } else if (mediaType === 'album') {
+    } else {
       setSearchResults(data.map((item) => (
         <li>
           <button
