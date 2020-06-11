@@ -49,7 +49,7 @@ function AuthBox() {
       const item = error.message.includes('username') ? 'username' : 'password';
       const message = displaySignUp
         ? `Please make sure your ${item} meets the requirements.`
-        : `Please enter your ${item}.`;
+        : `Error with username or password.`;
       setErrorMessage(message);
       console.log(error.name);
     }
@@ -74,10 +74,32 @@ function AuthBox() {
       }).then((responseJson) => {
         console.log(responseJson);
       }).catch((error) => {
-        setErrorMessage(error.message);
+        const message = error.message.includes('fetch')
+          ? 'Something went wrong! Please try again later.'
+          : error.message;
+        setErrorMessage(message);
       });
     } else if (userInfo && displayLogIn) {
-      // TO DO
+      fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(userInfo),
+        headers: {
+          'content-type': 'application/json',
+        },
+      }).then(response => {
+        if (response.ok) {
+          setUser(userInfo.username);
+          return response.json();
+        }
+        return response.json().then((error) => {
+          throw new Error(error.message);
+        })
+      }).then((responseJson) => {
+        // TO DO store token somewhere
+        console.log(responseJson);
+      }).catch((error) => {
+        setErrorMessage(error.message);
+      })
     }
   }, [userInfo, displaySignUp, displayLogIn]);
 

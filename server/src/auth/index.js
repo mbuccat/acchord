@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const assert = require('assert');
+const jwt = require('jsonwebtoken');
 
 const schema = require('./schema');
 
@@ -21,11 +22,15 @@ router.get('/', (req, res) => {
 });
 
 const validateSignUp = async (req, res, next) => {
-  const error = await schema.validateAsync(req.body);
-  if (error !== null) {
-    next();
-  } else {
-    next(new Error('Sign up info invalid'));
+  try {
+    const error = await schema.validateAsync(req.body);
+    if (error !== null) {
+      next();
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Error with username or password.'})
+    next(new Error('Username or password does not match validation schema.'));
+    
   }
 };
 
@@ -38,7 +43,7 @@ const checkUniqueUser = async (req, res, next) => {
     next();
   } else {
     res.status(400).json({ message: 'Username is taken.' });
-    next(new Error('User not unique'));
+    next(new Error('User not unique.'));
   }
 };
 
@@ -61,6 +66,44 @@ router.post('/signup', validateSignUp, checkUniqueUser, async (req, res) => {
     res.sendStatus(500);
     console.log(err.message);
   }
+});
+
+const checkUserExists = async (req, res, next) => {
+  const collection = client.db('acchord').collection('users');
+  const { username } = req.body;
+  const count = await collection.countDocuments({ username }, { limit: 1 });
+
+  if (count === 1) {
+    next();
+  } else {
+    res.status(400).json({ message: 'User not found.' }); // change message?
+    next(new Error('User does not exist in database.'));
+  }
+};
+
+const validatePassword = async (req, res, next) => {
+  const collection = client.db('acchord').collection('users');
+  const { username, password } = req.body;
+  const userDoc = await collection.findOne({username: username });
+
+  if (bcrypt.compareSync(password, userDoc.hashedPassword)) {
+    const payload = {
+      username,
+      _id: userDoc._id
+    }
+    res.locals.token = jwt.sign(payload, process.env.TOKEN_KEY, { expiresIn: '1d'});
+    next();
+  } else {
+    res.status(400).json({ message: 'Error with username or password.' });
+    next(new Error('User entered the wrong password.'));
+  }
+};
+
+router.post('/login', validateSignUp, checkUserExists, validatePassword, (req, res) => {
+  res.status(200).json({
+    message: 'User logged in!',
+    token: res.locals.token,
+  });
 });
 
 module.exports = router;
