@@ -21,8 +21,9 @@ function AuthBox() {
   const { user, setUser } = useContext(UserContext);
   const [displaySignUp, setDisplaySignUp] = useState(false);
   const [displayLogIn, setDisplayLogIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [validatedUserInput, setValidatedUserInput] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSignUp = () => {
     setDisplaySignUp(true);
@@ -40,7 +41,7 @@ function AuthBox() {
       const { error } = await schema.validate({ username, password });
 
       if (error == undefined) {
-        setUserInfo({ username, password });
+        setValidatedUserInput({ username, password });
         setErrorMessage('');
       } else {
         throw error;
@@ -49,23 +50,26 @@ function AuthBox() {
       const item = error.message.includes('username') ? 'username' : 'password';
       const message = displaySignUp
         ? `Please make sure your ${item} meets the requirements.`
-        : `Error with username or password.`;
+        : 'Error with username or password.';
       setErrorMessage(message);
       console.log(error.name);
     }
   };
 
   useEffect(() => {
-    if (userInfo && displaySignUp) {
+    if (validatedUserInput && displaySignUp) {
       fetch('http://localhost:3001/auth/signup', {
         method: 'POST',
-        body: JSON.stringify(userInfo),
+        body: JSON.stringify(validatedUserInput),
         headers: {
           'content-type': 'application/json',
         },
       }).then((response) => {
         if (response.ok) {
-          setUser(userInfo.username);
+          setValidatedUserInput(null);
+          setSuccessMessage('Account created! Please log in.');
+          setDisplaySignUp(false);
+          setDisplayLogIn(true);
           return response.json();
         }
         return response.json().then((error) => {
@@ -79,29 +83,32 @@ function AuthBox() {
           : error.message;
         setErrorMessage(message);
       });
-    } else if (userInfo && displayLogIn) {
+    } else if (validatedUserInput && displayLogIn) {
       fetch('http://localhost:3001/auth/login', {
         method: 'POST',
-        body: JSON.stringify(userInfo),
+        body: JSON.stringify(validatedUserInput),
         headers: {
           'content-type': 'application/json',
         },
-      }).then(response => {
+      }).then((response) => {
         if (response.ok) {
-          setUser(userInfo.username);
           return response.json();
         }
         return response.json().then((error) => {
           throw new Error(error.message);
-        })
+        });
       }).then((responseJson) => {
-        // TO DO store token somewhere
-        console.log(responseJson);
+        localStorage.token = responseJson.token;
+        localStorage.setItem('acchordUsername', validatedUserInput.username);
+        setUser({
+          username: validatedUserInput.username,
+          token: responseJson.token,
+        });
       }).catch((error) => {
         setErrorMessage(error.message);
-      })
+      });
     }
-  }, [userInfo, displaySignUp, displayLogIn]);
+  }, [validatedUserInput, displaySignUp, displayLogIn, setUser]);
 
   return (
     <div className="row justify-content-center p-4 mb-0">
@@ -109,6 +116,11 @@ function AuthBox() {
         { errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
+        </div>
+        )}
+        { successMessage && (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
         </div>
         )}
         {!displaySignUp && !displayLogIn && (
