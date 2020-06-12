@@ -106,4 +106,13 @@ router.post('/login', validateSignUp, checkUserExists, validatePassword, (req, r
   });
 });
 
+router.post('/token', (req, res) => {
+  try {
+    jwt.verify(req.body.token, process.env.TOKEN_KEY);
+    res.status(200).json('Token verified.');
+  } catch (error) {
+    res.status(401).json('Token unverified.');
+  }
+});
+
 module.exports = router;
