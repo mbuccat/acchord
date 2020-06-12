@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import ReviewForm from './ReviewForm';
 import SearchResults from './SearchResults';
+import { querySchema } from '../schema';
 
 function InputBox() {
   const [query, setQuery] = useState();
@@ -13,6 +14,7 @@ function InputBox() {
   const [displaySearchForm, setDisplaySearchForm] = useState(true);
   const [displayResults, setDisplayResults] = useState(false);
   const [displayReviewForm, setDisplayReviewForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   function handleMediaTypeChange(e) {
     setMediaType(e.target.value);
@@ -20,7 +22,17 @@ function InputBox() {
 
   const handleSearchSubmit = useCallback((e) => {
     e.preventDefault();
-    setQuery(e.target.query.value);
+    const input = e.target.query.value;
+    const { error } = querySchema.validate(input);
+
+    if (error === undefined) {
+      setQuery(input);
+    } else {
+      const message = error.message.includes('50')
+        ? 'Please shorten your query.'
+        : 'Please check your query.';
+      setErrorMessage(message);
+    }
   }, [setQuery]);
 
   const handleButtonClick = useCallback((e) => {
@@ -77,6 +89,7 @@ function InputBox() {
       try {
         setDisplaySearchForm(false);
         setDisplayResults(true);
+        setErrorMessage('');
 
         fetch('http://localhost:3001/api/search', {
           method: 'POST',
@@ -99,6 +112,7 @@ function InputBox() {
         { displaySearchForm
             && (
             <div className="InputBox col-sm-12 p-4 border border-dark rounded">
+              {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
               <form className="" onSubmit={handleSearchSubmit}>
                 <h2>I want to review:</h2>
                 <div className="w-100" />

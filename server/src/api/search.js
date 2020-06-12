@@ -1,24 +1,35 @@
 const { Router } = require('express');
 const fetch = require('node-fetch');
+const { querySchema } = require('./schema');
 
 const router = Router();
 
 router.post('/', async (req, res) => {
   try {
-    const mediaType = req.body.mediaType;
-    const query = encodeURI(req.body.query);
-    const api_url = `https://api.deezer.com/search/${mediaType}/?q=${query}&index=0&limit=5&output=json`
+    const { mediaType } = req.body;
+    const { error } = querySchema.validate(req.body.query);
 
-    const apiResponse = await fetch(api_url);
+    if (error !== undefined) {
+      throw new Error(error);
+    }
+
+    const query = encodeURI(req.body.query);
+    const apiUrl = `https://api.deezer.com/search/${mediaType}/?q=${query}&index=0&limit=5&output=json`;
+
+    const apiResponse = await fetch(apiUrl);
     const apiResponseJson = await apiResponse.json();
 
     res.status(200).json({
       message: 'Search received',
       jsonFromMusicApi: apiResponseJson,
     });
-  } catch (err) {
-    console.log(err.message);
-    res.send(500);
+  } catch (error) {
+    const message = error.message.includes('50')
+      ? 'Please shorten your query.'
+      : 'Please check your query.';
+    res.status(400).json({
+      message,
+    });
   }
 });
 
