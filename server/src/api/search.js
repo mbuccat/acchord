@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const fetch = require('node-fetch');
 const { querySchema } = require('./schema');
+const { validateToken } = require('../auth/index');
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+router.post('/', validateToken, async (req, res) => {
   try {
     const { mediaType } = req.body;
     const { error } = querySchema.validate(req.body.query);

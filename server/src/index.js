@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use('/auth', auth)
+app.use('/auth', auth.router);
 app.use('/api/search', search);
 app.use('/api/reviews', reviews);
 

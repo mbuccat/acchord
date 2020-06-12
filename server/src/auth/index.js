@@ -28,9 +28,8 @@ const validateSignUp = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.status(400).json({ message: 'Error with username or password.'})
+    res.status(400).json({ message: 'Error with username or password.' });
     next(new Error('Username or password does not match validation schema.'));
-    
   }
 };
 
@@ -84,14 +83,14 @@ const checkUserExists = async (req, res, next) => {
 const validatePassword = async (req, res, next) => {
   const collection = client.db('acchord').collection('users');
   const { username, password } = req.body;
-  const userDoc = await collection.findOne({username: username });
+  const userDoc = await collection.findOne({ username });
 
   if (bcrypt.compareSync(password, userDoc.hashedPassword)) {
     const payload = {
       username,
-      _id: userDoc._id
-    }
-    res.locals.token = jwt.sign(payload, process.env.TOKEN_KEY, { expiresIn: '1d'});
+      _id: userDoc._id,
+    };
+    res.locals.token = jwt.sign(payload, process.env.TOKEN_KEY, { expiresIn: '1d' });
     next();
   } else {
     res.status(400).json({ message: 'Error with username or password.' });
@@ -106,13 +105,17 @@ router.post('/login', validateSignUp, checkUserExists, validatePassword, (req, r
   });
 });
 
-router.post('/token', (req, res) => {
+const validateToken = (req, res, next) => {
   try {
     jwt.verify(req.body.token, process.env.TOKEN_KEY);
-    res.status(200).json('Token verified.');
+    next();
   } catch (error) {
     res.status(401).json('Token unverified.');
   }
+};
+
+router.post('/token', validateToken, (req, res) => {
+  res.status(200).json('Token verified.');
 });
 
-module.exports = router;
+module.exports = { router, validateToken };

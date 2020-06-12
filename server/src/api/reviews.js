@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { MongoClient } = require('mongodb');
 const assert = require('assert');
 const { reviewSchema } = require('./schema');
+const { validateToken } = require('../auth/index');
 
 const router = Router();
 
@@ -62,7 +63,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', validateToken, (req, res) => {
   try {
     const db = client.db('acchord');
     const collection = db.collection('reviews');

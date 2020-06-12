@@ -1,7 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect, useContext,
+} from 'react';
 import { contentSchema } from '../schema';
+import UserContext from './UserContext';
 
 function ReviewForm({ mediaName, mediaCreator, mediaType }) {
+  const { user, setUser } = useContext(UserContext);
   const [content, setContent] = useState();
   const [display, setDisplay] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -38,6 +42,7 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
           mediaName,
           mediaCreator,
           content,
+          token: user.token,
         }),
       });
     }

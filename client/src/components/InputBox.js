@@ -1,11 +1,13 @@
 import React, {
-  useState, useCallback, useEffect,
+  useState, useCallback, useEffect, useContext,
 } from 'react';
 import ReviewForm from './ReviewForm';
 import SearchResults from './SearchResults';
 import { querySchema } from '../schema';
+import UserContext from './UserContext';
 
 function InputBox() {
+  const { user, setUser } = useContext(UserContext);
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState('Searching...');
   const [mediaType, setMediaType] = useState('track');
@@ -96,7 +98,7 @@ function InputBox() {
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ query, mediaType }),
+          body: JSON.stringify({ query, mediaType, token: user.token }),
         })
           .then((response) => response.json())
           .then((responseJson) => createSearchResultsDisplay(responseJson.jsonFromMusicApi));
