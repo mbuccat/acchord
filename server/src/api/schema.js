@@ -8,7 +8,7 @@ const querySchema = Joi.string()
 
 const reviewSchema = Joi.object({
   mediaType: Joi.string()
-    .pattern(/^(track)|(artist)|(album)$/)
+    .pattern(/^(track)|(album)$/)
     .required(),
 
   mediaName: Joi.string()

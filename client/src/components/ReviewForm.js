@@ -10,9 +10,7 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   const [display, setDisplay] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const reviewHeader = mediaName === ''
-    ? `Reviewing ${mediaCreator}`
-    : `Reviewing ${mediaName} by ${mediaCreator}`;
+  const reviewHeader = `Reviewing ${mediaName} by ${mediaCreator}`;
 
   const handleButtonClick = useCallback((e) => {
     e.preventDefault();

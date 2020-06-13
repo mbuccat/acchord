@@ -50,20 +50,6 @@ function InputBox() {
 
     if (data == false) {
       setSearchResults('No matches found. Please be more specific with your search.');
-    } else if (mediaType === 'artist') {
-      setSearchResults(data.map((item) => (
-        <li>
-          <button
-            type="button"
-            className="btn btn-light mb-2 btn-sm w-100 text-left"
-            onClick={handleButtonClick}
-            data-medianame=""
-            data-mediacreator={item.name}
-          >
-            {item.name}
-          </button>
-        </li>
-      )));
     } else {
       setSearchResults(data.map((item) => (
         <li>
@@ -122,7 +108,6 @@ function InputBox() {
                   <div className="input-group-prepend">
                     <select className="custom-select" onChange={handleMediaTypeChange}>
                       <option defaultValue value="track">a track</option>
-                      <option value="artist">an artist</option>
                       <option value="album">an album</option>
                     </select>
                   </div>
