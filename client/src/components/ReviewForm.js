@@ -9,16 +9,18 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   const [content, setContent] = useState();
   const [display, setDisplay] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const reviewHeader = mediaName === ''
     ? `Reviewing ${mediaCreator}`
     : `Reviewing ${mediaName} by ${mediaCreator}`;
 
   const handleButtonClick = useCallback((e) => {
-    const content = e.target.form.reviewtext.value;
-    const { error } = contentSchema.validate(content);
+    e.preventDefault();
+    const input = e.target.form.reviewtext.value;
+    const { error } = contentSchema.validate(input);
 
     if (error === undefined) {
-      setContent(content);
+      setContent(input);
     } else {
       const message = error.message.includes('1000')
         ? 'Please shorten your review to 1000 characters or less.'
@@ -44,14 +46,28 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
           content,
           token: user.token,
         }),
-      });
+      })
+        .then((response) => {
+          if (response.ok) {
+            setSuccessMessage('Review submitted!');
+            setInterval(() => {
+              window.location.reload(false);
+            }, 1500);
+            return;
+          }
+          throw new Error('Unable to post review.');
+        })
+        .catch((error) => {
+          setErrorMessage(error.message);
+        });
     }
   }, [mediaCreator, mediaName, mediaType, content]);
 
   return (
-    display && (
-      <div className="InputBox col-sm-12 p-4 border border-dark rounded">
-        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+    <div className="InputBox col-sm-12 p-4 border border-dark rounded">
+      {successMessage && <div className="alert alert-success mb-0">{successMessage}</div>}
+      {errorMessage && <div className="alert alert-danger mb-0">{errorMessage}</div>}
+      { display && (
         <div className="ReviewForm">
           <h2>
             {reviewHeader}
@@ -65,6 +81,16 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
             />
             <button
               type="button"
+              className="btn btn-danger mr-1"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.reload(false);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
               form="review-form"
               className="btn btn-dark"
               onClick={handleButtonClick}
@@ -73,8 +99,8 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
             </button>
           </form>
         </div>
-      </div>
-    )
+      )}
+    </div>
   );
 }
 

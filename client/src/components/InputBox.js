@@ -55,7 +55,7 @@ function InputBox() {
         <li>
           <button
             type="button"
-            className="btn btn-dark mb-2 btn-sm w-100 text-left"
+            className="btn btn-light mb-2 btn-sm w-100 text-left"
             onClick={handleButtonClick}
             data-medianame=""
             data-mediacreator={item.name}
@@ -69,7 +69,7 @@ function InputBox() {
         <li>
           <button
             type="button"
-            className="btn btn-dark mb-2 btn-sm w-100 text-left"
+            className="btn btn-light mb-2 btn-sm w-100 text-left"
             onClick={handleButtonClick}
             data-medianame={item.title}
             data-mediacreator={item.artist.name}

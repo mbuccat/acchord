@@ -46,8 +46,8 @@ function App() {
 
   return (
     <div className="App container-fluid p-0 m-0">
-      <Nav />
       <UserContext.Provider value={userValue}>
+        <Nav />
         {user.username
           ? (
             <div className="row justify-content-center px-3 mt-3">

@@ -20,18 +20,10 @@ const schema = Joi.object({
 function AuthBox() {
   const { user, setUser } = useContext(UserContext);
   const [displaySignUp, setDisplaySignUp] = useState(false);
-  const [displayLogIn, setDisplayLogIn] = useState(false);
+  const [displayLogIn, setDisplayLogIn] = useState(true);
   const [validatedUserInput, setValidatedUserInput] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
-  const handleSignUp = () => {
-    setDisplaySignUp(true);
-  };
-
-  const handleLogIn = () => {
-    setDisplayLogIn(true);
-  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -105,7 +97,10 @@ function AuthBox() {
           token: responseJson.token,
         });
       }).catch((error) => {
-        setErrorMessage(error.message);
+        const message = error.message.includes('fetch')
+        ? 'Something went wrong! Please try again later.'
+        : error.message;
+        setErrorMessage(message);
       });
     }
   }, [validatedUserInput, displaySignUp, displayLogIn, setUser]);
@@ -121,17 +116,6 @@ function AuthBox() {
         { successMessage && (
         <div className="alert alert-success" role="alert">
           {successMessage}
-        </div>
-        )}
-        {!displaySignUp && !displayLogIn && (
-        <div>
-          <button className="btn-sm btn-dark" onClick={handleSignUp} type="button">Sign up</button>
-          {' '}
-          or
-          {' '}
-          <button className="btn-sm btn-dark" onClick={handleLogIn} type="button">Log in</button>
-          {' '}
-          to post reviews.
         </div>
         )}
         {displaySignUp
@@ -164,6 +148,17 @@ function AuthBox() {
               <input type="password" className="form-control" id="password" placeholder="Enter your password" />
             </div>
             <button type="submit" form="logInForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Log In</button>
+            <button
+              type="button"
+              className="btn btn-link text-muted"
+              onClick={(e) => {
+                e.preventDefault();
+                setDisplayLogIn(false);
+                setDisplaySignUp(true);
+              }}
+            >
+              Sign up for an account
+            </button>
           </form>
           )}
       </div>

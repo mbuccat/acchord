@@ -7,6 +7,16 @@ function SearchResults({ searchResults }) {
         <h2>Did you mean:</h2>
         {searchResults}
       </ul>
+      <button
+        type="button"
+        className="btn btn-danger"
+        onClick={(e) => {
+          e.preventDefault();
+          window.location.reload(false);
+        }}
+      >
+        Cancel
+      </button>
     </div>
   );
 }
