@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import album from './img/album.png';
+import track from './img/track.png';
 
 function Feed() {
   const [feed, setFeed] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // for each post in the results array, create an li
   const createFeed = (results) => {
     setFeed(
       results.reverse().map(({
-        content, created, mediaCreator, mediaName,
+        content, created, mediaCreator, mediaName, mediaType
       }) => {
-        const reviewHeader = mediaName === ''
-          ? `Review of ${mediaCreator}`
-          : `Review of ${mediaName} by ${mediaCreator}`;
+        const reviewHeader = `Review of ${mediaName} by ${mediaCreator}`;
+        const imgSrc = mediaType === 'track' ? track : album;
 
         return (
           <li className="media mb-5">
-            <img className="mr-3" src=".../64x64" alt="profile" />
+            <img className="mr-3" src={imgSrc} width="50" height="50" alt="media type icon" />
             <div className="media-body">
               <h5 className="mt-0 mb-1">{reviewHeader}</h5>
               {content}
@@ -41,13 +43,17 @@ function Feed() {
         const { results } = responseJson;
         createFeed(results);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        setErrorMessage('Unable to load reviews.');
+        console.log(err.message);
+      });
   }, []);
 
   return (
     <div className="row justify-content-center py-0 px-4">
       <div className="Feed col-sm-12 p-4 border border-dark rounded">
         <h2>Recent reviews</h2>
+        {errorMessage && <div className="alert alert-danger mb-0">{errorMessage}</div>}
         <ul className="list-unstyled">
           {feed}
         </ul>
