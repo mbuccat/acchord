@@ -1,21 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import UserContext from './UserContext';
-
-const Joi = require('@hapi/joi');
-
-const schema = Joi.object({
-  username: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
-
-  password: Joi.string()
-    .trim()
-    .min(8)
-    .max(20)
-    .required(),
-});
+import { userSchema } from '../schema';
 
 function AuthBox() {
   const { setUser } = useContext(UserContext);
@@ -25,12 +10,14 @@ function AuthBox() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  // store username and password if they are valid according to the schema,
+  // this will trigger useEffect()
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
       const username = e.target.form.username.value;
       const password = e.target.form.password.value;
-      const { error } = await schema.validate({ username, password });
+      const { error } = await userSchema.validate({ username, password });
 
       if (error === undefined) {
         setValidatedUserInput({ username, password });
@@ -47,6 +34,7 @@ function AuthBox() {
     }
   };
 
+  // POST user creds to appropriate path based on which form is displayed
   useEffect(() => {
     if (validatedUserInput && displaySignUp) {
       fetch('http://localhost:3001/auth/signup', {
@@ -121,12 +109,12 @@ function AuthBox() {
            <div className="form-group">
              <label htmlFor="username">Username</label>
              <input type="username" className="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter a username" />
-             <small id="usernameHelp" className="form-text text-muted">Must be 3 to 20 characters.</small>
+             <small id="usernameHelp" className="form-text text-muted">Must be 3 to 20 characters. Only letters or numbers.</small>
            </div>
            <div className="form-group">
              <label htmlFor="password">Password</label>
              <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="Enter a password" />
-             <small id="passwordHelp" className="form-text text-muted">Must be 8 to 20 characters.</small>
+             <small id="passwordHelp" className="form-text text-muted">Must be 8 to 20 characters. No spaces.</small>
            </div>
            <button type="submit" form="signUpForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Sign Up</button>
          </form>

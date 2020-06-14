@@ -6,10 +6,11 @@ function Feed() {
   const [feed, setFeed] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // for each post in the results array, create an li
-  const createFeed = (results) => {
+  // for each review, create an li
+  // and set the feed state variable to an array of these li elements
+  const createFeed = (reviews) => {
     setFeed(
-      results.reverse().map(({
+      reviews.reverse().map(({
         content, created, mediaCreator, mediaName, mediaType,
       }, index) => {
         const reviewHeader = `${mediaName} by ${mediaCreator}`;
@@ -31,6 +32,7 @@ function Feed() {
     );
   };
 
+  // GET the music reviews from the server
   useEffect(() => {
     fetch('http://localhost:3001/api/reviews')
       .then((response) => {
@@ -40,8 +42,8 @@ function Feed() {
         throw new Error('Request failed!');
       })
       .then((responseJson) => {
-        const { results } = responseJson;
-        createFeed(results);
+        const { reviews } = responseJson;
+        createFeed(reviews);
       })
       .catch(() => {
         setErrorMessage('Unable to load reviews.');

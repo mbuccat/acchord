@@ -6,7 +6,7 @@ import SearchResults from './SearchResults';
 import { querySchema } from '../schema';
 import UserContext from './UserContext';
 
-function InputBox() {
+function SearchBox() {
   const { user } = useContext(UserContext);
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState('Searching...');
@@ -18,10 +18,13 @@ function InputBox() {
   const [displayReviewForm, setDisplayReviewForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // store whether the user wants to search for a song or album
   function handleMediaTypeChange(e) {
     setMediaType(e.target.value);
   }
 
+  // store the user's query if it is valid against the query schema,
+  // this will trigger useEffect()
   const handleSearchSubmit = useCallback((e) => {
     e.preventDefault();
     const input = e.target.query.value;
@@ -37,6 +40,8 @@ function InputBox() {
     }
   }, [setQuery]);
 
+  // when the user selects a song or album from the search results,
+  // display a blank review form for that item
   const handleButtonClick = useCallback((e) => {
     e.preventDefault();
     setMediaName(e.target.dataset.medianame);
@@ -45,6 +50,9 @@ function InputBox() {
     setDisplayReviewForm(true);
   }, [setMediaName, setMediaCreator]);
 
+  // create a button for each search result item,
+  // so the user can select which item they want to review,
+  // the list of buttons will be passed to the SearchResults component
   const createSearchResultsDisplay = useCallback((jsonFromApi) => {
     const { data } = jsonFromApi;
 
@@ -129,4 +137,4 @@ function InputBox() {
   );
 }
 
-export default InputBox;
+export default SearchBox;

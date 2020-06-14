@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import Nav from './components/Nav';
 import AuthBox from './components/AuthBox';
-import InputBox from './components/InputBox';
+import SearchBox from './components/SearchBox';
 import Feed from './components/Feed';
 import UserContext from './components/UserContext';
 
@@ -14,6 +14,8 @@ function App() {
   });
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
+  // verify token,
+  // clear localStorage if the token is not from the server
   useEffect(() => {
     if (user.token) {
       fetch('http://localhost:3001/auth/token', {
@@ -39,6 +41,7 @@ function App() {
     }
   }, [user.token, setUser]);
 
+  // display welcome message and search/review form if user is signed in
   return (
     <div className="App container-fluid p-0 m-0">
       <UserContext.Provider value={userValue}>
@@ -63,7 +66,7 @@ function App() {
             </div>
             <div  className="col-12 order-1 col-lg-4 order-lg-12 pt-3">
               {!user.username && !user.token && <AuthBox />}
-              {user.username && user.token && <InputBox />}
+              {user.username && user.token && <SearchBox />}
             </div>
           </div>
       </UserContext.Provider>

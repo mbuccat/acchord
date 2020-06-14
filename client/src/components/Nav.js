@@ -4,6 +4,7 @@ import UserContext from './UserContext';
 function Nav() {
   const { user, setUser } = useContext(UserContext);
 
+  // display a sign out button if a user is signed in
   return (
     <nav className="navbar navbar-dark bg-dark navbar-expand px-3 justify-content-between">
       <h1 className="navbar-brand m-0" style={{fontFamily: 'Montserrat, sans-serif'}}>acchord</h1>

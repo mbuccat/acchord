@@ -12,6 +12,8 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   const [successMessage, setSuccessMessage] = useState('');
   const reviewHeader = `Reviewing ${mediaName} by ${mediaCreator}`;
 
+  // store the user's review if it is valid against the content schema,
+  // this will trigger useEffect()
   const handleButtonClick = useCallback((e) => {
     e.preventDefault();
     const input = e.target.form.reviewtext.value;
@@ -27,6 +29,7 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
     }
   }, [setContent]);
 
+  // POST the user's review to the server
   useEffect(() => {
     if (content) {
       setDisplay(false);
@@ -62,7 +65,7 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   }, [mediaCreator, mediaName, mediaType, content, user.token]);
 
   return (
-    <div className="InputBox col-sm-12 p-4 border border-dark rounded">
+    <div className="col-sm-12 p-4 border border-dark rounded">
       {successMessage && <div className="alert alert-success mb-0">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger mb-0">{errorMessage}</div>}
       { display && (

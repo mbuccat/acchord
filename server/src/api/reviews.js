@@ -48,14 +48,14 @@ router.get('/', (req, res) => {
     const db = client.db('acchord');
     const collection = db.collection('reviews');
     const cursor = collection.find();
-    const results = [];
+    const reviews = [];
 
     cursor.forEach((doc, docErr) => {
       assert.equal(null, docErr);
-      results.push(doc);
+      reviews.push(doc);
     }, () => {
       res.status(200);
-      res.json({ results });
+      res.json({ reviews });
     });
   } catch (err) {
     res.sendStatus(500);
