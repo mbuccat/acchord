@@ -1,7 +1,6 @@
 import React, {
   useState, useMemo, useEffect,
 } from 'react';
-import './App.css';
 import Nav from './components/Nav';
 import AuthBox from './components/AuthBox';
 import InputBox from './components/InputBox';
@@ -46,7 +45,7 @@ function App() {
         <Nav />
         {user.username
           ? (
-            <div className="row justify-content-center px-3 mt-3">
+            <div className="row px-4 mt-3">
               <div className="Welcome col-sm-12">
                 <h1 className="mb-0">
                   Welcome,
@@ -58,10 +57,16 @@ function App() {
             </div>
           )
           : <div />}
-        {!user.username && !user.token && <AuthBox />}
-        {user.username && user.token && <InputBox />}
+          <div className="row justify-content-center px-4 py-0">
+            <div className="col-12 order-12 col-lg-8 order-lg-1 pt-3">
+              <Feed />
+            </div>
+            <div  className="col-12 order-1 col-lg-4 order-lg-12 pt-3">
+              {!user.username && !user.token && <AuthBox />}
+              {user.username && user.token && <InputBox />}
+            </div>
+          </div>
       </UserContext.Provider>
-      <Feed />
     </div>
   );
 }

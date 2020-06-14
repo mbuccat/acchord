@@ -49,7 +49,7 @@ function InputBox() {
     const { data } = jsonFromApi;
 
     if (data.length === 0) {
-      setSearchResults('No matches found. Please be more specific with your search.');
+      setSearchResults((<div className="alert alert-danger">No matches found.</div>));
     } else {
       setSearchResults(data.map((item) => (
         <li>
@@ -96,10 +96,10 @@ function InputBox() {
 
   return (
     (
-      <div className="row justify-content-center p-4 mb-0">
+      <div>
         { displaySearchForm
             && (
-            <div className="InputBox col-sm-12 p-4 border border-dark rounded">
+            <div className="p-4 border border-dark rounded">
               {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
               <form onSubmit={handleSearchSubmit}>
                 <h2>I want to review:</h2>

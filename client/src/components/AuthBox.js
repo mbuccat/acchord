@@ -103,8 +103,7 @@ function AuthBox() {
   }, [validatedUserInput, displaySignUp, displayLogIn, setUser]);
 
   return (
-    <div className="row justify-content-center p-4 mb-0">
-      <div className="AuthBox col-sm-12 p-4 border border-dark rounded">
+      <div className="p-4 border border-dark rounded">
         { errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
@@ -145,9 +144,10 @@ function AuthBox() {
               <input type="password" className="form-control" id="password" placeholder="Enter your password" />
             </div>
             <button type="submit" form="logInForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Log In</button>
+            <div className="w-100" />
             <button
               type="button"
-              className="btn btn-link text-muted"
+              className="btn btn-link text-muted px-0"
               onClick={(e) => {
                 e.preventDefault();
                 setDisplayLogIn(false);
@@ -159,7 +159,6 @@ function AuthBox() {
           </form>
           )}
       </div>
-    </div>
   );
 }
 

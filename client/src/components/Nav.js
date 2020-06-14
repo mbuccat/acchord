@@ -5,8 +5,8 @@ function Nav() {
   const { user, setUser } = useContext(UserContext);
 
   return (
-    <nav className="navbar navbar-expand px-3 border border-dark justify-content-between">
-      <h1 className="navbar-brand m-0">acchord</h1>
+    <nav className="navbar navbar-dark bg-dark navbar-expand px-3 justify-content-between">
+      <h1 className="navbar-brand m-0" style={{fontFamily: 'Montserrat, sans-serif'}}>acchord</h1>
       { user.username && user.token
         && (
         <button

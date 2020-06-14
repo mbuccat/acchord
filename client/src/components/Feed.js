@@ -12,7 +12,7 @@ function Feed() {
       results.reverse().map(({
         content, created, mediaCreator, mediaName, mediaType,
       }, index) => {
-        const reviewHeader = `Review of ${mediaName} by ${mediaCreator}`;
+        const reviewHeader = `${mediaName} by ${mediaCreator}`;
         const imgSrc = mediaType === 'track' ? track : album;
 
         return (
@@ -49,15 +49,13 @@ function Feed() {
   }, []);
 
   return (
-    <div className="row justify-content-center py-0 px-4">
-      <div className="Feed col-sm-12 p-4 border border-dark rounded">
-        <h2>Recent reviews</h2>
+      <div className="p-4 border border-dark rounded">
+        <h2 className="mb-4">Recent reviews</h2>
         {errorMessage && <div className="alert alert-danger mb-0">{errorMessage}</div>}
         <ul className="list-unstyled">
           {feed}
         </ul>
       </div>
-    </div>
   );
 }
 
