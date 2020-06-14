@@ -10,13 +10,13 @@ function Feed() {
   const createFeed = (results) => {
     setFeed(
       results.reverse().map(({
-        content, created, mediaCreator, mediaName, mediaType
-      }) => {
+        content, created, mediaCreator, mediaName, mediaType,
+      }, index) => {
         const reviewHeader = `Review of ${mediaName} by ${mediaCreator}`;
         const imgSrc = mediaType === 'track' ? track : album;
 
         return (
-          <li className="media mb-5">
+          <li className="media mb-5" key={index}>
             <img className="mr-3" src={imgSrc} width="50" height="50" alt="media type icon" />
             <div className="media-body">
               <h5 className="mt-0 mb-1">{reviewHeader}</h5>
@@ -43,9 +43,8 @@ function Feed() {
         const { results } = responseJson;
         createFeed(results);
       })
-      .catch((err) => {
+      .catch(() => {
         setErrorMessage('Unable to load reviews.');
-        console.log(err.message);
       });
   }, []);
 

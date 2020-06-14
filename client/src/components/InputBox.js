@@ -7,7 +7,7 @@ import { querySchema } from '../schema';
 import UserContext from './UserContext';
 
 function InputBox() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState('Searching...');
   const [mediaType, setMediaType] = useState('track');
@@ -48,7 +48,7 @@ function InputBox() {
   const createSearchResultsDisplay = useCallback((jsonFromApi) => {
     const { data } = jsonFromApi;
 
-    if (data == false) {
+    if (data.length === 0) {
       setSearchResults('No matches found. Please be more specific with your search.');
     } else {
       setSearchResults(data.map((item) => (
@@ -69,7 +69,7 @@ function InputBox() {
         </li>
       )));
     }
-  }, [setSearchResults, handleButtonClick, mediaType]);
+  }, [setSearchResults, handleButtonClick]);
 
   // when the user makes a search query, send to server
   useEffect(() => {
@@ -89,10 +89,10 @@ function InputBox() {
           .then((response) => response.json())
           .then((responseJson) => createSearchResultsDisplay(responseJson.jsonFromMusicApi));
       } catch (err) {
-        console.log(err);
+        setErrorMessage('Unable to get search results.');
       }
     }
-  }, [query, mediaType, createSearchResultsDisplay]);
+  }, [query, mediaType, createSearchResultsDisplay, user.token]);
 
   return (
     (
@@ -101,7 +101,7 @@ function InputBox() {
             && (
             <div className="InputBox col-sm-12 p-4 border border-dark rounded">
               {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-              <form className="" onSubmit={handleSearchSubmit}>
+              <form onSubmit={handleSearchSubmit}>
                 <h2>I want to review:</h2>
                 <div className="w-100" />
                 <div className="input-group">
@@ -114,9 +114,7 @@ function InputBox() {
                   <input
                     type="string"
                     className="form-control"
-                    id=""
                     name="query"
-                    aria-describedby=""
                     placeholder={`Which ${mediaType}?`}
                   />
                 </div>

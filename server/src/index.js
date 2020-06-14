@@ -5,7 +5,7 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-const auth = require('./auth/index')
+const auth = require('./auth/index');
 const search = require('./api/search');
 const reviews = require('./api/reviews');
 

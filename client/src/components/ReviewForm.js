@@ -5,7 +5,7 @@ import { contentSchema } from '../schema';
 import UserContext from './UserContext';
 
 function ReviewForm({ mediaName, mediaCreator, mediaType }) {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [content, setContent] = useState();
   const [display, setDisplay] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -59,7 +59,7 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
           setErrorMessage(error.message);
         });
     }
-  }, [mediaCreator, mediaName, mediaType, content]);
+  }, [mediaCreator, mediaName, mediaType, content, user.token]);
 
   return (
     <div className="InputBox col-sm-12 p-4 border border-dark rounded">

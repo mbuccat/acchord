@@ -26,20 +26,16 @@ function App() {
       })
         .then((response) => {
           if (response.ok) {
-            return response.json();
+            return undefined;
           }
           return response.json().then((error) => {
             throw new Error(error);
           });
         })
-        .then((responseJson) => {
-          console.log(responseJson);
-        })
-        .catch((error) => {
+        .catch(() => {
           localStorage.removeItem('token');
           localStorage.removeItem('acchordUsername');
           setUser({ username: null, token: null });
-          console.log(error.message);
         });
     }
   }, [user.token, setUser]);

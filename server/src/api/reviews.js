@@ -67,7 +67,9 @@ router.post('/', validateToken, (req, res) => {
   try {
     const db = client.db('acchord');
     const collection = db.collection('reviews');
-    const { mediaType, mediaName, mediaCreator, content } = req.body;
+    const {
+      mediaType, mediaName, mediaCreator, content,
+    } = req.body;
     const { error } = reviewSchema.validate({
       mediaType, mediaName, mediaCreator, content,
     });

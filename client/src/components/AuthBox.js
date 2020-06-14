@@ -18,7 +18,7 @@ const schema = Joi.object({
 });
 
 function AuthBox() {
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [displaySignUp, setDisplaySignUp] = useState(false);
   const [displayLogIn, setDisplayLogIn] = useState(true);
   const [validatedUserInput, setValidatedUserInput] = useState(null);
@@ -32,7 +32,7 @@ function AuthBox() {
       const password = e.target.form.password.value;
       const { error } = await schema.validate({ username, password });
 
-      if (error == undefined) {
+      if (error === undefined) {
         setValidatedUserInput({ username, password });
         setErrorMessage('');
       } else {
@@ -44,7 +44,6 @@ function AuthBox() {
         ? `Please make sure your ${item} meets the requirements.`
         : 'Error with username or password.';
       setErrorMessage(message);
-      console.log(error.name);
     }
   };
 
@@ -62,13 +61,11 @@ function AuthBox() {
           setSuccessMessage('Account created! Please log in.');
           setDisplaySignUp(false);
           setDisplayLogIn(true);
-          return response.json();
+          return undefined;
         }
         return response.json().then((error) => {
           throw new Error(error.message);
         });
-      }).then((responseJson) => {
-        console.log(responseJson);
       }).catch((error) => {
         const message = error.message.includes('fetch')
           ? 'Something went wrong! Please try again later.'
@@ -98,8 +95,8 @@ function AuthBox() {
         });
       }).catch((error) => {
         const message = error.message.includes('fetch')
-        ? 'Something went wrong! Please try again later.'
-        : error.message;
+          ? 'Something went wrong! Please try again later.'
+          : error.message;
         setErrorMessage(message);
       });
     }
@@ -124,12 +121,12 @@ function AuthBox() {
            <h2>Sign Up</h2>
            <div className="form-group">
              <label htmlFor="username">Username</label>
-             <input type="username" className="form-control" id="username" aria-describedby="" placeholder="Enter a username" />
+             <input type="username" className="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter a username" />
              <small id="usernameHelp" className="form-text text-muted">Must be 3 to 20 characters.</small>
            </div>
            <div className="form-group">
              <label htmlFor="password">Password</label>
-             <input type="password" className="form-control" id="password" placeholder="Enter a password" />
+             <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="Enter a password" />
              <small id="passwordHelp" className="form-text text-muted">Must be 8 to 20 characters.</small>
            </div>
            <button type="submit" form="signUpForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Sign Up</button>
@@ -141,7 +138,7 @@ function AuthBox() {
             <h2>Log In</h2>
             <div className="form-group">
               <label htmlFor="username">Username</label>
-              <input type="username" className="form-control" id="username" aria-describedby="" placeholder="Enter your username" />
+              <input type="username" className="form-control" id="username" placeholder="Enter your username" />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
