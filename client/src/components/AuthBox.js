@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import UserContext from './UserContext';
 import { userSchema } from '../schema';
+import { API_URL } from '../App';
 
 function AuthBox() {
   const { setUser } = useContext(UserContext);
@@ -37,7 +38,7 @@ function AuthBox() {
   // POST user creds to appropriate path based on which form is displayed
   useEffect(() => {
     if (validatedUserInput && displaySignUp) {
-      fetch('http://localhost:3001/auth/signup', {
+      fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         body: JSON.stringify(validatedUserInput),
         headers: {
@@ -61,7 +62,7 @@ function AuthBox() {
         setErrorMessage(message);
       });
     } else if (validatedUserInput && displayLogIn) {
-      fetch('http://localhost:3001/auth/login', {
+      fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         body: JSON.stringify(validatedUserInput),
         headers: {

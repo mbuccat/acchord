@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { contentSchema } from '../schema';
 import UserContext from './UserContext';
+import { API_URL } from '../App';
 
 function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   const { user } = useContext(UserContext);
@@ -29,41 +30,56 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
     }
   }, [setContent]);
 
+  // disable posting for deployed app
   // POST the user's review to the server
+  // useEffect(() => {
+  //   if (content) {
+  //     setDisplay(false);
+  //     setErrorMessage('');
+
+  //     fetch(`${API_URL}/api/reviews`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         mediaType,
+  //         mediaName,
+  //         mediaCreator,
+  //         content,
+  //         token: user.token,
+  //       }),
+  //     })
+  //       .then((response) => {
+  //         if (response.ok) {
+  //           setSuccessMessage('Review submitted!');
+  //           setInterval(() => {
+  //             window.location.reload(false);
+  //           }, 1500);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         const message = error.message.includes('fetch')
+  //           ? 'Unable to post review.'
+  //           : error.message;
+  //         setErrorMessage(message);
+  //       });
+  //   }
+  // }, [mediaCreator, mediaName, mediaType, content, user.token]);
+
   useEffect(() => {
     if (content) {
-      setDisplay(false);
-      setErrorMessage('');
-
-      fetch('http://localhost:3001/api/reviews', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          mediaType,
-          mediaName,
-          mediaCreator,
-          content,
-          token: user.token,
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            setSuccessMessage('Review submitted!');
-            setInterval(() => {
-              window.location.reload(false);
-            }, 1500);
-          }
-        })
-        .catch((error) => {
-          const message = error.message.includes('fetch')
-            ? 'Unable to post review.'
-            : error.message;
-          setErrorMessage(message);
-        });
+      setErrorMessage(
+        <p className="mb-0">
+          Posting has been disabled! Instead, please see
+          {' '}
+          <a href="https://github.com/mbuccat/acchord">the code repository</a>
+          {' '}
+          for a demo.
+        </p>,
+      );
     }
-  }, [mediaCreator, mediaName, mediaType, content, user.token]);
+  }, [content]);
 
   return (
     <div className="col-sm-12 p-4 border border-dark rounded">

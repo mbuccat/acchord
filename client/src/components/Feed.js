@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import album from './img/album.png';
 import track from './img/track.png';
+import { API_URL } from '../App';
 
 function Feed() {
   const [feed, setFeed] = useState([]);
@@ -34,7 +35,7 @@ function Feed() {
 
   // GET the music reviews from the server
   useEffect(() => {
-    fetch('http://localhost:3001/api/reviews')
+    fetch(`${API_URL}/api/reviews`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -46,7 +47,7 @@ function Feed() {
         createFeed(reviews);
       })
       .catch(() => {
-        setErrorMessage('Unable to load reviews.');
+        setErrorMessage('Unable to load reviews. You may be making too many requests.');
       });
   }, []);
 

@@ -7,6 +7,10 @@ import SearchBox from './components/SearchBox';
 import Feed from './components/Feed';
 import UserContext from './components/UserContext';
 
+const API_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3001'
+  : 'https://acchord.herokuapp.com';
+
 function App() {
   const [user, setUser] = useState({
     username: localStorage.getItem('acchordUsername'),
@@ -18,7 +22,7 @@ function App() {
   // clear localStorage if the token is not from the server
   useEffect(() => {
     if (user.token) {
-      fetch('http://localhost:3001/auth/token', {
+      fetch(`${API_URL}/auth/token`, {
         method: 'POST',
         body: JSON.stringify({ token: user.token }),
         headers: {
@@ -72,4 +76,4 @@ function App() {
   );
 }
 
-export default App;
+export { App, API_URL };

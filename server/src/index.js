@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const rateLimit = require("express-rate-limit");
 
 require('dotenv').config();
 
@@ -12,6 +13,13 @@ const reviews = require('./api/reviews');
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30
+});
+ 
+app.use(limiter);
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors());

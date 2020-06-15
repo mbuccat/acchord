@@ -5,6 +5,7 @@ import ReviewForm from './ReviewForm';
 import SearchResults from './SearchResults';
 import { querySchema } from '../schema';
 import UserContext from './UserContext';
+import { API_URL } from '../App';
 
 function SearchBox() {
   const { user } = useContext(UserContext);
@@ -86,7 +87,7 @@ function SearchBox() {
       setDisplayResults(true);
       setErrorMessage('');
 
-      fetch('http://localhost:3001/api/search', {
+      fetch(`${API_URL}/api/search`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
