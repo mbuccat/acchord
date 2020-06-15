@@ -15,12 +15,6 @@ client.connect((err) => {
   console.log('Successfully connected to the database from auth router');
 });
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Auth route get',
-  });
-});
-
 const validateSignUp = async (req, res, next) => {
   try {
     const error = await schema.validateAsync(req.body);
@@ -58,11 +52,11 @@ router.post('/signup', validateSignUp, checkUniqueUser, async (req, res) => {
     const collection = client.db('acchord').collection('users');
     collection.insertOne(userInfo, (insertionErr) => {
       assert.equal(null, insertionErr);
-      console.log('User information inserted into database');
+      console.log('User inserted into database', { userInfo });
       res.status(200).json('User created!');
     });
   } catch (err) {
-    res.sendStatus(500);
+    res.status(500).json({ message: 'Unable to sign user up.' });
     console.log(err.message);
   }
 });

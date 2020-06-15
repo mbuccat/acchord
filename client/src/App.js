@@ -29,9 +29,7 @@ function App() {
           if (response.ok) {
             return undefined;
           }
-          return response.json().then((error) => {
-            throw new Error(error);
-          });
+          throw new Error('Unable to verify token.');
         })
         .catch(() => {
           localStorage.removeItem('token');
@@ -60,15 +58,15 @@ function App() {
             </div>
           )
           : <div />}
-          <div className="row justify-content-center px-4 py-0">
-            <div className="col-12 order-12 col-lg-8 order-lg-1 pt-3">
-              <Feed />
-            </div>
-            <div  className="col-12 order-1 col-lg-4 order-lg-12 pt-3">
-              {!user.username && !user.token && <AuthBox />}
-              {user.username && user.token && <SearchBox />}
-            </div>
+        <div className="row justify-content-center px-4 py-0">
+          <div className="col-12 order-12 col-lg-8 order-lg-1 pt-3">
+            <Feed />
           </div>
+          <div className="col-12 order-1 col-lg-4 order-lg-12 pt-3">
+            {!user.username && !user.token && <AuthBox />}
+            {user.username && user.token && <SearchBox />}
+          </div>
+        </div>
       </UserContext.Provider>
     </div>
   );

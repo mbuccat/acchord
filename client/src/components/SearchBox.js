@@ -82,23 +82,29 @@ function SearchBox() {
   // when the user makes a search query, send to server
   useEffect(() => {
     if (query) {
-      try {
-        setDisplaySearchForm(false);
-        setDisplayResults(true);
-        setErrorMessage('');
+      setDisplaySearchForm(false);
+      setDisplayResults(true);
+      setErrorMessage('');
 
-        fetch('http://localhost:3001/api/search', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({ query, mediaType, token: user.token }),
+      fetch('http://localhost:3001/api/search', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ query, mediaType, token: user.token }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          return response.json().then((error) => {
+            throw new Error(error.message);
+          });
         })
-          .then((response) => response.json())
-          .then((responseJson) => createSearchResultsDisplay(responseJson.jsonFromMusicApi));
-      } catch (err) {
-        setErrorMessage('Unable to get search results.');
-      }
+        .then((responseJson) => createSearchResultsDisplay(responseJson.jsonFromMusicApi))
+        .catch((error) => {
+          setErrorMessage(error.message);
+        });
     }
   }, [query, mediaType, createSearchResultsDisplay, user.token]);
 

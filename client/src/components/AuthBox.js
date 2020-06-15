@@ -91,18 +91,18 @@ function AuthBox() {
   }, [validatedUserInput, displaySignUp, displayLogIn, setUser]);
 
   return (
-      <div className="p-4 border border-dark rounded">
-        { errorMessage && (
+    <div className="p-4 border border-dark rounded">
+      { errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
         </div>
-        )}
-        { successMessage && (
+      )}
+      { successMessage && (
         <div className="alert alert-success" role="alert">
           {successMessage}
         </div>
-        )}
-        {displaySignUp
+      )}
+      {displaySignUp
          && (
          <form id="signUpForm">
            <h2>Sign Up</h2>
@@ -119,7 +119,7 @@ function AuthBox() {
            <button type="submit" form="signUpForm" className="btn-sm btn-dark" onClick={handleFormSubmit}>Sign Up</button>
          </form>
          )}
-        {displayLogIn
+      {displayLogIn
           && (
           <form id="logInForm">
             <h2>Log In</h2>
@@ -146,7 +146,7 @@ function AuthBox() {
             </button>
           </form>
           )}
-      </div>
+    </div>
   );
 }
 

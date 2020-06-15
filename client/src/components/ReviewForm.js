@@ -54,12 +54,13 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
             setInterval(() => {
               window.location.reload(false);
             }, 1500);
-            return;
           }
-          throw new Error('Unable to post review.');
         })
         .catch((error) => {
-          setErrorMessage(error.message);
+          const message = error.message.includes('fetch')
+            ? 'Unable to post review.'
+            : error.message;
+          setErrorMessage(message);
         });
     }
   }, [mediaCreator, mediaName, mediaType, content, user.token]);

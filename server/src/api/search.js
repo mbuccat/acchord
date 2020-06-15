@@ -20,17 +20,18 @@ router.post('/', validateToken, async (req, res) => {
     const apiResponse = await fetch(apiUrl);
     const apiResponseJson = await apiResponse.json();
 
+    if (apiResponseJson.error) {
+      throw new Error('Results from Deezer returned an error.');
+    }
+
     res.status(200).json({
       message: 'Search received',
       jsonFromMusicApi: apiResponseJson,
     });
   } catch (error) {
-    const message = error.message.includes('50')
-      ? 'Please shorten your query.'
-      : 'Please check your query.';
-    res.status(400).json({
-      message,
-    });
+    const response = error.message.includes('ValidationError')
+      ? res.status(400).json({ message: 'Please check your query.' })
+      : res.status(500).json({ message: 'Unable to perform search.' });
   }
 });
 
