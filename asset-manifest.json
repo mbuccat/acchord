@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/acchord/static/css/main.815a9b6e.chunk.css",
+    "main.js": "/acchord/static/js/main.bcc2982a.chunk.js",
+    "main.js.map": "/acchord/static/js/main.bcc2982a.chunk.js.map",
+    "runtime-main.js": "/acchord/static/js/runtime-main.865e4dae.js",
+    "runtime-main.js.map": "/acchord/static/js/runtime-main.865e4dae.js.map",
+    "static/css/2.829c9cb5.chunk.css": "/acchord/static/css/2.829c9cb5.chunk.css",
+    "static/js/2.57a0a588.chunk.js": "/acchord/static/js/2.57a0a588.chunk.js",
+    "static/js/2.57a0a588.chunk.js.map": "/acchord/static/js/2.57a0a588.chunk.js.map",
+    "index.html": "/acchord/index.html",
+    "precache-manifest.042fc365de3e8bf5ad603f273c534222.js": "/acchord/precache-manifest.042fc365de3e8bf5ad603f273c534222.js",
+    "service-worker.js": "/acchord/service-worker.js",
+    "static/css/2.829c9cb5.chunk.css.map": "/acchord/static/css/2.829c9cb5.chunk.css.map",
+    "static/css/main.815a9b6e.chunk.css.map": "/acchord/static/css/main.815a9b6e.chunk.css.map",
+    "static/js/2.57a0a588.chunk.js.LICENSE.txt": "/acchord/static/js/2.57a0a588.chunk.js.LICENSE.txt",
+    "static/media/album.png": "/acchord/static/media/album.27544c82.png",
+    "static/media/track.png": "/acchord/static/media/track.91c3ee31.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.865e4dae.js",
+    "static/css/2.829c9cb5.chunk.css",
+    "static/js/2.57a0a588.chunk.js",
+    "static/css/main.815a9b6e.chunk.css",
+    "static/js/main.bcc2982a.chunk.js"
+  ]
+}

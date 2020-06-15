@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,UACE,kCAAoC,CACpC,WAAY,CACZ,UAAW,CACX,QAAS,CACT,SAAU,CACV,iBACF","file":"main.815a9b6e.chunk.css","sourcesContent":["html, body {\n  font-family: 'Open Sans', sans-serif;\n  height: 100%;\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  overflow-x: hidden;\n}"]}
