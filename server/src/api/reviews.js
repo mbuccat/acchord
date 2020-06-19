@@ -63,45 +63,45 @@ router.get('/', (req, res) => {
   }
 });
 
-router.post('/', validateToken, (req, res) => {
-  try {
-    const db = client.db('acchord');
-    const collection = db.collection('reviews');
-    const {
-      mediaType, mediaName, mediaCreator, content,
-    } = req.body;
-    const { error } = reviewSchema.validate({
-      mediaType, mediaName, mediaCreator, content,
-    });
+// router.post('/', validateToken, (req, res) => {
+//   try {
+//     const db = client.db('acchord');
+//     const collection = db.collection('reviews');
+//     const {
+//       mediaType, mediaName, mediaCreator, content,
+//     } = req.body;
+//     const { error } = reviewSchema.validate({
+//       mediaType, mediaName, mediaCreator, content,
+//     });
 
-    if (error === undefined) {
-      const reviewData = {
-        mediaType,
-        mediaName,
-        mediaCreator,
-        content,
-        created: new Date(),
-      };
+//     if (error === undefined) {
+//       const reviewData = {
+//         mediaType,
+//         mediaName,
+//         mediaCreator,
+//         content,
+//         created: new Date(),
+//       };
 
-      collection.insertOne(reviewData, (insertionErr) => {
-        assert.equal(null, insertionErr);
-        console.log('Item inserted into database');
-        res.status(200).json({
-          message: 'Review posted!',
-        });
-      });
-    } else {
-      throw new Error(error);
-    }
-  } catch (error) {
-    const message = error.message.includes('1000')
-      ? 'Please shorten your review to 1000 characters or less.'
-      : 'Review could not be posted.';
-    res.status(400).json({
-      message,
-    });
-    console.log(error.message);
-  }
-});
+//       collection.insertOne(reviewData, (insertionErr) => {
+//         assert.equal(null, insertionErr);
+//         console.log('Item inserted into database');
+//         res.status(200).json({
+//           message: 'Review posted!',
+//         });
+//       });
+//     } else {
+//       throw new Error(error);
+//     }
+//   } catch (error) {
+//     const message = error.message.includes('1000')
+//       ? 'Please shorten your review to 1000 characters or less.'
+//       : 'Review could not be posted.';
+//     res.status(400).json({
+//       message,
+//     });
+//     console.log(error.message);
+//   }
+// });
 
 module.exports = router;
