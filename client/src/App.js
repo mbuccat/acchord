@@ -6,10 +6,7 @@ import AuthBox from './components/AuthBox';
 import SearchBox from './components/SearchBox';
 import Feed from './components/Feed';
 import UserContext from './components/UserContext';
-
-const API_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:3001'
-  : 'https://acchord.herokuapp.com';
+import API_URL from './api_url';
 
 function App() {
   const [user, setUser] = useState({
@@ -76,4 +73,4 @@ function App() {
   );
 }
 
-export { App, API_URL };
+export default App;

@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const rateLimit = require("express-rate-limit");
+const rateLimit = require('express-rate-limit');
 
 require('dotenv').config({ path: 'server/.env' });
 
@@ -15,15 +15,15 @@ const port = process.env.PORT || 3001;
 
 const corsOptions = {
   origin: 'https://mbuccat.github.io',
-  optionsSuccessStatus: 200
-}
+  optionsSuccessStatus: 200,
+};
 
 app.set('trust proxy', 1);
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 30
+  max: 30,
 });
- 
+
 app.use(limiter);
 app.use(morgan('common'));
 app.use(helmet());

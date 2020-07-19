@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import UserContext from './UserContext';
 import { userSchema } from '../schema';
-import { API_URL } from '../App';
+import API_URL from '../api_url';
 
 function AuthBox() {
   const { setUser } = useContext(UserContext);

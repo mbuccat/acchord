@@ -1,9 +1,10 @@
 import React, {
   useState, useCallback, useEffect, useContext,
 } from 'react';
+import PropTypes from 'prop-types';
 import { contentSchema } from '../schema';
 import UserContext from './UserContext';
-import { API_URL } from '../App';
+import API_URL from '../api_url';
 
 function ReviewForm({ mediaName, mediaCreator, mediaType }) {
   const { user } = useContext(UserContext);
@@ -121,5 +122,11 @@ function ReviewForm({ mediaName, mediaCreator, mediaType }) {
     </div>
   );
 }
+
+ReviewForm.propTypes = {
+  mediaName: PropTypes.string.isRequired,
+  mediaCreator: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
+};
 
 export default ReviewForm;

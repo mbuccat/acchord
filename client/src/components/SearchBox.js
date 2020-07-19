@@ -5,7 +5,7 @@ import ReviewForm from './ReviewForm';
 import SearchResults from './SearchResults';
 import { querySchema } from '../schema';
 import UserContext from './UserContext';
-import { API_URL } from '../App';
+import API_URL from '../api_url';
 
 function SearchBox() {
   const { user } = useContext(UserContext);
