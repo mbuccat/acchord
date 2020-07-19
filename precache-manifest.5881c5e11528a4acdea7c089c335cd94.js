@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7f81750578f8285f11d7d2c835d93819",
+    "revision": "160d88b9a326f25344e3da6c958ed0ce",
     "url": "/acchord/index.html"
   },
   {
-    "revision": "117ac854eb547b7ea04d",
+    "revision": "2c3a31a78eafd970db31",
     "url": "/acchord/static/css/2.829c9cb5.chunk.css"
   },
   {
-    "revision": "67e2a726cc34649815a9",
+    "revision": "099978a21942a4b50f4a",
     "url": "/acchord/static/css/main.815a9b6e.chunk.css"
   },
   {
-    "revision": "117ac854eb547b7ea04d",
-    "url": "/acchord/static/js/2.57a0a588.chunk.js"
+    "revision": "2c3a31a78eafd970db31",
+    "url": "/acchord/static/js/2.5153b6f0.chunk.js"
   },
   {
     "revision": "e88a3e95b5364d46e95b35ae8c0dc27d",
-    "url": "/acchord/static/js/2.57a0a588.chunk.js.LICENSE.txt"
+    "url": "/acchord/static/js/2.5153b6f0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "67e2a726cc34649815a9",
-    "url": "/acchord/static/js/main.bcc2982a.chunk.js"
+    "revision": "099978a21942a4b50f4a",
+    "url": "/acchord/static/js/main.ee4cd37c.chunk.js"
   },
   {
     "revision": "7318b1e976fdb0745ae7",
