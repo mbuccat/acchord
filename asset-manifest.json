@@ -1,27 +1,27 @@
 {
   "files": {
     "main.css": "/acchord/static/css/main.815a9b6e.chunk.css",
-    "main.js": "/acchord/static/js/main.ee4cd37c.chunk.js",
-    "main.js.map": "/acchord/static/js/main.ee4cd37c.chunk.js.map",
-    "runtime-main.js": "/acchord/static/js/runtime-main.865e4dae.js",
-    "runtime-main.js.map": "/acchord/static/js/runtime-main.865e4dae.js.map",
-    "static/css/2.829c9cb5.chunk.css": "/acchord/static/css/2.829c9cb5.chunk.css",
-    "static/js/2.5153b6f0.chunk.js": "/acchord/static/js/2.5153b6f0.chunk.js",
-    "static/js/2.5153b6f0.chunk.js.map": "/acchord/static/js/2.5153b6f0.chunk.js.map",
+    "main.js": "/acchord/static/js/main.240197c1.chunk.js",
+    "main.js.map": "/acchord/static/js/main.240197c1.chunk.js.map",
+    "runtime-main.js": "/acchord/static/js/runtime-main.ff63021d.js",
+    "runtime-main.js.map": "/acchord/static/js/runtime-main.ff63021d.js.map",
+    "static/css/2.6e90b12a.chunk.css": "/acchord/static/css/2.6e90b12a.chunk.css",
+    "static/js/2.aa767a17.chunk.js": "/acchord/static/js/2.aa767a17.chunk.js",
+    "static/js/2.aa767a17.chunk.js.map": "/acchord/static/js/2.aa767a17.chunk.js.map",
     "index.html": "/acchord/index.html",
-    "precache-manifest.5881c5e11528a4acdea7c089c335cd94.js": "/acchord/precache-manifest.5881c5e11528a4acdea7c089c335cd94.js",
+    "precache-manifest.a295bae7df90450788084d546234f284.js": "/acchord/precache-manifest.a295bae7df90450788084d546234f284.js",
     "service-worker.js": "/acchord/service-worker.js",
-    "static/css/2.829c9cb5.chunk.css.map": "/acchord/static/css/2.829c9cb5.chunk.css.map",
+    "static/css/2.6e90b12a.chunk.css.map": "/acchord/static/css/2.6e90b12a.chunk.css.map",
     "static/css/main.815a9b6e.chunk.css.map": "/acchord/static/css/main.815a9b6e.chunk.css.map",
-    "static/js/2.5153b6f0.chunk.js.LICENSE.txt": "/acchord/static/js/2.5153b6f0.chunk.js.LICENSE.txt",
+    "static/js/2.aa767a17.chunk.js.LICENSE.txt": "/acchord/static/js/2.aa767a17.chunk.js.LICENSE.txt",
     "static/media/album.png": "/acchord/static/media/album.27544c82.png",
     "static/media/track.png": "/acchord/static/media/track.91c3ee31.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.865e4dae.js",
-    "static/css/2.829c9cb5.chunk.css",
-    "static/js/2.5153b6f0.chunk.js",
+    "static/js/runtime-main.ff63021d.js",
+    "static/css/2.6e90b12a.chunk.css",
+    "static/js/2.aa767a17.chunk.js",
     "static/css/main.815a9b6e.chunk.css",
-    "static/js/main.ee4cd37c.chunk.js"
+    "static/js/main.240197c1.chunk.js"
   ]
 }
